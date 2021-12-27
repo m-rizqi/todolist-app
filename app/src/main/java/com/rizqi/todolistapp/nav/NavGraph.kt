@@ -1,5 +1,6 @@
 package com.rizqi.todolist.nav
 
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -8,7 +9,8 @@ import com.rizqi.todolist.ui.view.Login
 
 @Composable
 fun SetUpNavGraph(
-    navHostController: NavHostController
+    navHostController: NavHostController,
+    activity : ComponentActivity
 ) {
     NavHost(
         navController = navHostController,
@@ -17,7 +19,7 @@ fun SetUpNavGraph(
         composable(
             route = Screen.Login.route
         ){
-            Login()
+            Login(activity)
         }
     }
 }
