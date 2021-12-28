@@ -1,13 +1,8 @@
 package com.rizqi.todolist.ui.view
 
+import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.LinearOutSlowInEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -25,7 +20,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -36,15 +30,24 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.rizqi.todolistapp.R
+import androidx.navigation.NavHostController
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.ktx.Firebase
+import com.rizqi.todolist.nav.Screen
+import com.rizqi.todolistapp.callback.FirebaseUserCallbackFailed
+import com.rizqi.todolistapp.callback.FirebaseUserCallbackSuccess
+import com.rizqi.todolistapp.repository.GoogleAuthKit
+import com.rizqi.todolistapp.repository.loginEmailPassword
 import com.rizqi.todolistapp.ui.theme.*
+import com.rizqi.todolistapp.viewmodel.AuthViewModel
+import java.lang.Exception
 
 @ExperimentalComposeUiApi
 @Composable
-fun Login(activity : ComponentActivity) {
+fun Login(activity : ComponentActivity, navHostController: NavHostController) {
+    val firebase = Firebase
     activity.window.statusBarColor = GreyGradient1.hashCode()
     activity.window.navigationBarColor = GreyGradient2.hashCode()
     ToDoListAppTheme() {
@@ -59,7 +62,7 @@ fun Login(activity : ComponentActivity) {
             FocusRequester()
         }
         val keyboardController = LocalSoftwareKeyboardController.current
-        var googleClicked by remember { mutableStateOf(false) }
+        var signinButtonLoading by remember { mutableStateOf(false)}
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -189,23 +192,52 @@ fun Login(activity : ComponentActivity) {
             )
             Spacer(modifier = Modifier.height(24.dp))
             Button(
-                onClick = { /*TODO*/ },
+                onClick = {
+                    signinButtonLoading = true
+                          loginEmailPassword(
+                              email = emailText,
+                              password = passwordText,
+                              firebase = firebase,
+                              firebaseUserCallbackSuccess = object : FirebaseUserCallbackSuccess {
+                                  override fun onCallback(firebaseUser: FirebaseUser) {
+                                      signinButtonLoading = false
+                                      navHostController.navigate(Screen.Home.route)
+                                  }
+                              },
+                              firebaseUserCallbackFailed = object :FirebaseUserCallbackFailed {
+                                  override fun onCallback(exception: Exception) {
+                                      signinButtonLoading = false
+                                      Toast.makeText(activity,"Sign Failed : ${exception.message}", Toast.LENGTH_SHORT).show()
+                                  }
+                              }
+                          )
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 15.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = BlueSoft)
             ) {
-                Text(
-                    modifier = Modifier.padding(vertical = 8.dp),
-                    text = "Sign In",
-                    style = TextStyle(
-                        color = Color.White,
-                        fontFamily = Poppins,
-                        fontWeight = FontWeight.SemiBold,
-                        fontSize = 14.sp
+                if(signinButtonLoading){
+                    CircularProgressIndicator(
+                        modifier = Modifier
+                            .size(20.dp),
+                        strokeWidth = 2.dp,
+                        color = Color.White
                     )
-                )
+                }else{
+                    Text(
+                        modifier = Modifier.padding(vertical = 8.dp),
+                        text = "Sign In",
+                        style = TextStyle(
+                            color = Color.White,
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.SemiBold,
+                            fontSize = 14.sp
+                        )
+                    )
+                }
+
             }
             Spacer(modifier = Modifier.height(32.dp))
             Row(
@@ -253,12 +285,7 @@ fun Login(activity : ComponentActivity) {
                 ){}
             }
             Spacer(modifier = Modifier.height(32.dp))
-            Icon(
-                modifier = Modifier.size(55.dp),
-                painter = painterResource(id = R.drawable.ic_google_logo),
-                contentDescription = "Google Button",
-                tint = Color.Unspecified,
-            )
+            GoogleAuthKit(authViewModel = AuthViewModel(), navHostController = navHostController)
             Spacer(modifier = Modifier.height(32.dp))
             Row() {
                 Text(
@@ -291,5 +318,5 @@ fun Login(activity : ComponentActivity) {
 )
 @Composable
 fun LoginPreview() {
-    Login(ComponentActivity())
+    Login(ComponentActivity(), NavHostController(ComponentActivity()))
 }
