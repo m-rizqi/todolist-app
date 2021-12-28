@@ -1,7 +1,12 @@
 package com.rizqi.todolist.ui.view
 
 import androidx.activity.ComponentActivity
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,7 +25,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -29,8 +36,10 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rizqi.todolistapp.R
 import com.rizqi.todolistapp.ui.theme.*
 
 @ExperimentalComposeUiApi
@@ -50,6 +59,7 @@ fun Login(activity : ComponentActivity) {
             FocusRequester()
         }
         val keyboardController = LocalSoftwareKeyboardController.current
+        var googleClicked by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -197,7 +207,79 @@ fun Login(activity : ComponentActivity) {
                     )
                 )
             }
-
+            Spacer(modifier = Modifier.height(32.dp))
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .width(100.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Color.Transparent,
+                                    Grey2
+                                )
+                            )
+                        ),
+                ){}
+                Text(
+                    text = "Or continue with",
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp),
+                    style = TextStyle(
+                        color = Grey2,
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 10.sp
+                    ),
+                )
+                Box(
+                    modifier = Modifier
+                        .height(1.dp)
+                        .width(100.dp)
+                        .background(
+                            brush = Brush.horizontalGradient(
+                                colors = listOf(
+                                    Grey2,
+                                    Color.Transparent,
+                                )
+                            )
+                        ),
+                ){}
+            }
+            Spacer(modifier = Modifier.height(32.dp))
+            Icon(
+                modifier = Modifier.size(55.dp),
+                painter = painterResource(id = R.drawable.ic_google_logo),
+                contentDescription = "Google Button",
+                tint = Color.Unspecified,
+            )
+            Spacer(modifier = Modifier.height(32.dp))
+            Row() {
+                Text(
+                    text = "Does'nt have an account yet?",
+                    style = TextStyle(
+                        color = Grey2,
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp
+                    ),
+                )
+                Text(
+                    text = " Register now",
+                    style = TextStyle(
+                        color = BlueSoft,
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp
+                    ),
+                )
+            }
         }
     }
 }
