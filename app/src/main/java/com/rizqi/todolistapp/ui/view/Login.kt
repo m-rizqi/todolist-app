@@ -2,7 +2,9 @@ package com.rizqi.todolist.ui.view
 
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
@@ -36,12 +38,12 @@ import androidx.navigation.NavHostController
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.ktx.Firebase
 import com.rizqi.todolist.nav.Screen
+import com.rizqi.todolistapp.R
 import com.rizqi.todolistapp.callback.FirebaseUserCallbackFailed
 import com.rizqi.todolistapp.callback.FirebaseUserCallbackSuccess
-import com.rizqi.todolistapp.repository.GoogleAuthKit
 import com.rizqi.todolistapp.repository.loginEmailPassword
+import com.rizqi.todolistapp.repository.model.User
 import com.rizqi.todolistapp.ui.theme.*
-import com.rizqi.todolistapp.viewmodel.AuthViewModel
 import java.lang.Exception
 
 @ExperimentalComposeUiApi
@@ -51,7 +53,7 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
     activity.window.statusBarColor = GreyGradient1.hashCode()
     activity.window.navigationBarColor = GreyGradient2.hashCode()
     ToDoListAppTheme() {
-        var emailText by remember {
+        var emailText by rememberSaveable {
             mutableStateOf("")
         }
         var passwordText by rememberSaveable {
@@ -63,6 +65,9 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
         }
         val keyboardController = LocalSoftwareKeyboardController.current
         var signinButtonLoading by remember { mutableStateOf(false)}
+        BackHandler() {
+
+        }
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -87,7 +92,7 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                 )
             )
             Text(
-                text = "Let's do our task",
+                text = "Let's do our task again",
                 style = TextStyle(
                     color = Color.Black,
                     fontFamily = Poppins,
@@ -199,7 +204,7 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                               password = passwordText,
                               firebase = firebase,
                               firebaseUserCallbackSuccess = object : FirebaseUserCallbackSuccess {
-                                  override fun onCallback(firebaseUser: FirebaseUser) {
+                                  override fun onCallback(firebaseUser: FirebaseUser?, user: User?) {
                                       signinButtonLoading = false
                                       navHostController.navigate(Screen.Home.route)
                                   }
@@ -221,7 +226,7 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                 if(signinButtonLoading){
                     CircularProgressIndicator(
                         modifier = Modifier
-                            .size(20.dp),
+                            .size(38.dp),
                         strokeWidth = 2.dp,
                         color = Color.White
                     )
@@ -285,7 +290,16 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                 ){}
             }
             Spacer(modifier = Modifier.height(32.dp))
-            GoogleAuthKit(authViewModel = AuthViewModel(), navHostController = navHostController)
+            IconButton(
+                onClick = {}
+            ) {
+                Icon(
+                    modifier = Modifier.size(55.dp),
+                    painter = painterResource(id = R.drawable.ic_google_logo),
+                    contentDescription = "Google Button",
+                    tint = Color.Unspecified,
+                )
+            }
             Spacer(modifier = Modifier.height(32.dp))
             Row() {
                 Text(
@@ -298,6 +312,9 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                     ),
                 )
                 Text(
+                    modifier = Modifier.clickable {
+                        navHostController.navigate(Screen.Register.route)
+                    },
                     text = " Register now",
                     style = TextStyle(
                         color = BlueSoft,

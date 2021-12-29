@@ -11,7 +11,7 @@ class AuthViewModel : ViewModel() {
     private val _user: MutableStateFlow<User?> = MutableStateFlow(null)
     val user: StateFlow<User?> = _user
     suspend fun signIn(id: String, name:String, email: String, photo: String, tasks: List<Task>? = null){
-        delay(1000)
+        delay(2000)
         _user.value = User(id, name, email, photo, tasks)
     }
 }
