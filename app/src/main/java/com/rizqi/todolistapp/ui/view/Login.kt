@@ -34,13 +34,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.ktx.Firebase
 import com.rizqi.todolist.nav.Screen
+import com.rizqi.todolist.viewmodel.DataStoreViewModel
 import com.rizqi.todolistapp.R
-import com.rizqi.todolistapp.callback.FirebaseUserCallbackFailed
-import com.rizqi.todolistapp.callback.FirebaseUserCallbackSuccess
+import com.rizqi.todolistapp.callback.FirebaseAuthCallbackFailed
+import com.rizqi.todolistapp.callback.FirebaseAuthCallbackSuccess
 import com.rizqi.todolistapp.repository.loginEmailPassword
 import com.rizqi.todolistapp.repository.model.User
 import com.rizqi.todolistapp.ui.theme.*
@@ -203,13 +204,16 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                               email = emailText,
                               password = passwordText,
                               firebase = firebase,
-                              firebaseUserCallbackSuccess = object : FirebaseUserCallbackSuccess {
-                                  override fun onCallback(firebaseUser: FirebaseUser?, user: User?) {
+                              firebaseAuthCallbackSuccess = object : FirebaseAuthCallbackSuccess {
+                                  override fun onCallback(user: User) {
+                                      val dataStoreViewModel = ViewModelProvider(activity).get(DataStoreViewModel::class.java)
+                                      dataStoreViewModel.setLogin(true)
+                                      user.id?.let { dataStoreViewModel.setUserId(it) }
                                       signinButtonLoading = false
                                       navHostController.navigate(Screen.Home.route)
                                   }
                               },
-                              firebaseUserCallbackFailed = object :FirebaseUserCallbackFailed {
+                              firebaseAuthCallbackFailed = object :FirebaseAuthCallbackFailed {
                                   override fun onCallback(exception: Exception) {
                                       signinButtonLoading = false
                                       Toast.makeText(activity,"Sign Failed : ${exception.message}", Toast.LENGTH_SHORT).show()

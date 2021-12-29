@@ -14,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.rizqi.todolist.nav.Screen
 import com.rizqi.todolist.nav.SetUpNavGraph
 import com.rizqi.todolist.repository.DataStoreRepository
 import com.rizqi.todolist.viewmodel.DataStoreViewModel
@@ -45,7 +46,7 @@ class MainActivity : ComponentActivity() {
                         login -> isLogin = login
                 })
                 if(isLogin){
-
+                    navHostController.navigate(Screen.Home.route)
                 }else{
                     SetUpNavGraph(navHostController = navHostController, this) // To Login Screen
                 }

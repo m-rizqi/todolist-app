@@ -2,6 +2,6 @@ package com.rizqi.todolistapp.callback
 
 import com.rizqi.todolistapp.repository.model.User
 
-interface FirebaseUserCallbackSuccess {
+interface FirebaseAuthCallbackSuccess {
     fun onCallback(user: User)
 }
