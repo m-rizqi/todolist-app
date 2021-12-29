@@ -14,11 +14,12 @@ import com.rizqi.todolistapp.ui.view.Home
 @Composable
 fun SetUpNavGraph(
     navHostController: NavHostController,
-    activity : ComponentActivity
+    activity : ComponentActivity,
+    startDestination: String = Screen.Login.route
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen.Login.route,
+        startDestination = startDestination,
     ){
         composable(
             route = Screen.Login.route
@@ -33,7 +34,7 @@ fun SetUpNavGraph(
         composable(
             route = Screen.Home.route
         ){
-            Home(activity)
+            Home(activity, navHostController)
         }
     }
 }

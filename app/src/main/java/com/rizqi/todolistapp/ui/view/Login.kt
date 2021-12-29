@@ -51,8 +51,6 @@ import java.lang.Exception
 @Composable
 fun Login(activity : ComponentActivity, navHostController: NavHostController) {
     val firebase = Firebase
-    activity.window.statusBarColor = GreyGradient1.hashCode()
-    activity.window.navigationBarColor = GreyGradient2.hashCode()
     ToDoListAppTheme() {
         var emailText by rememberSaveable {
             mutableStateOf("")
