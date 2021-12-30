@@ -1,6 +1,5 @@
 package com.rizqi.todolistapp.presentation.auth
 
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -27,22 +26,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import com.google.firebase.ktx.Firebase
 import com.rizqi.todolist.nav.Screen
-import com.rizqi.todolistapp.AppDataStoreViewModel
-import com.rizqi.todolistapp.callback.FirebaseAuthCallbackFailed
-import com.rizqi.todolistapp.callback.FirebaseAuthCallbackSuccess
-import com.rizqi.todolistapp.domain.model.User
-import com.rizqi.todolistapp.domain.registerEmailPassword
 import com.rizqi.todolistapp.ui.theme.*
-import java.lang.Exception
 
 @ExperimentalComposeUiApi
 @Composable
 fun Register(activity : ComponentActivity, navHostController: NavHostController) {
-    val firebase = Firebase
     activity.window.statusBarColor = GreyGradient1.hashCode()
     activity.window.navigationBarColor = GreyGradient2.hashCode()
     ToDoListAppTheme {
@@ -239,30 +229,7 @@ fun Register(activity : ComponentActivity, navHostController: NavHostController)
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 onClick = {
-                    registerButtonLoading = true
-                    registerEmailPassword(
-                        name = nameText,
-                        email = emailText,
-                        password = passwordText,
-                        confirmPassword = confirmPasswordText,
-                        firebase = firebase,
-                        firebaseAuthCallbackSuccess = object : FirebaseAuthCallbackSuccess{
-                            override fun onCallback(user: User) {
-                                val dataStoreViewModel = ViewModelProvider(activity).get(
-                                    AppDataStoreViewModel::class.java)
-                                dataStoreViewModel.setLogin(true)
-                                user.id?.let { dataStoreViewModel.setUserId(it) }
-                                registerButtonLoading = false
-                                navHostController.navigate(Screen.Home.route)
-                            }
-                        },
-                        firebaseAuthCallbackFailed = object :FirebaseAuthCallbackFailed{
-                            override fun onCallback(exception: Exception) {
-                                registerButtonLoading = false
-                                Toast.makeText(activity,"Sign Failed : ${exception.message}", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    )
+                    navHostController.navigate(Screen.Home.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()

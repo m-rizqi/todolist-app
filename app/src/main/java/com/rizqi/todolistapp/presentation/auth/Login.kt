@@ -40,9 +40,6 @@ import com.google.firebase.ktx.Firebase
 import com.rizqi.todolist.nav.Screen
 import com.rizqi.todolistapp.AppDataStoreViewModel
 import com.rizqi.todolistapp.R
-import com.rizqi.todolistapp.callback.FirebaseAuthCallbackFailed
-import com.rizqi.todolistapp.callback.FirebaseAuthCallbackSuccess
-import com.rizqi.todolistapp.domain.loginEmailPassword
 import com.rizqi.todolistapp.domain.model.User
 import com.rizqi.todolistapp.ui.theme.*
 import java.lang.Exception
@@ -197,28 +194,7 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 onClick = {
-                    signinButtonLoading = true
-                          loginEmailPassword(
-                              email = emailText,
-                              password = passwordText,
-                              firebase = firebase,
-                              firebaseAuthCallbackSuccess = object : FirebaseAuthCallbackSuccess {
-                                  override fun onCallback(user: User) {
-                                      val dataStoreViewModel = ViewModelProvider(activity).get(
-                                          AppDataStoreViewModel::class.java)
-                                      dataStoreViewModel.setLogin(true)
-                                      user.id?.let { dataStoreViewModel.setUserId(it) }
-                                      signinButtonLoading = false
-                                      navHostController.navigate(Screen.Home.route)
-                                  }
-                              },
-                              firebaseAuthCallbackFailed = object :FirebaseAuthCallbackFailed {
-                                  override fun onCallback(exception: Exception) {
-                                      signinButtonLoading = false
-                                      Toast.makeText(activity,"Sign Failed : ${exception.message}", Toast.LENGTH_SHORT).show()
-                                  }
-                              }
-                          )
+                    navHostController.navigate(Screen.Home.route)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
