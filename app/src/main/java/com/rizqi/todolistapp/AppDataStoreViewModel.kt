@@ -1,4 +1,4 @@
-package com.rizqi.todolist.viewmodel
+package com.rizqi.todolistapp
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class DataStoreViewModel(application: Application) : AndroidViewModel(application) {
+class AppDataStoreViewModel(application: Application) : AndroidViewModel(application) {
     private val repository = DataStoreRepository(application)
 
     val isLogin = repository.isLogin.asLiveData()

@@ -6,9 +6,9 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.rizqi.todolist.ui.view.Login
-import com.rizqi.todolist.ui.view.Register
-import com.rizqi.todolistapp.ui.view.Home
+import com.rizqi.todolistapp.presentation.auth.Login
+import com.rizqi.todolistapp.presentation.auth.Register
+import com.rizqi.todolistapp.presentation.home.Home
 
 @ExperimentalComposeUiApi
 @Composable

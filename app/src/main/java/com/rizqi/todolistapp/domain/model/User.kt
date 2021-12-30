@@ -1,4 +1,4 @@
-package com.rizqi.todolistapp.repository.model
+package com.rizqi.todolistapp.domain.model
 
 import com.rizqi.todolist.repository.model.Task
 

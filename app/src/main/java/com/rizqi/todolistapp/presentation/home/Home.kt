@@ -1,4 +1,4 @@
-package com.rizqi.todolistapp.ui.view
+package com.rizqi.todolistapp.presentation.home
 
 import android.content.ContentValues.TAG
 import android.util.Log
@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -41,8 +40,8 @@ import com.google.firebase.ktx.Firebase
 import com.rizqi.todolistapp.R
 import com.rizqi.todolistapp.callback.UserDatabaseCallbackFailed
 import com.rizqi.todolistapp.callback.UserDatabaseCallbackSuccess
-import com.rizqi.todolistapp.repository.firebase.getCurrentUser
-import com.rizqi.todolistapp.repository.model.User
+import com.rizqi.todolistapp.domain.firebase.getCurrentUser
+import com.rizqi.todolistapp.domain.model.User
 import com.rizqi.todolistapp.ui.theme.*
 import java.lang.Exception
 import kotlin.math.max
@@ -66,8 +65,8 @@ fun Home(activity: ComponentActivity, navHostController: NavHostController) {
             firebase = Firebase,
             userDatabaseCallbackSuccess = object : UserDatabaseCallbackSuccess{
                 override fun onCallback(data: User) {
-                    user = data
-                    Log.d(TAG, "user:${user}")
+                    Log.d(TAG, "data:${data}")
+//                    user = data
                 }
 
             },
@@ -116,7 +115,7 @@ fun AppBar(scrollState: LazyListState, user: User) {
                         alpha = 1f - offsetProgress
                     }
                     .background(
-                        Color.Red
+                        Color.White
                     )
             ) {
                 Row(

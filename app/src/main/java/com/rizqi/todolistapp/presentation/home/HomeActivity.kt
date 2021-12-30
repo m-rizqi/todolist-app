@@ -1,4 +1,4 @@
-package com.rizqi.todolistapp.ui.view
+package com.rizqi.todolistapp.presentation.home
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

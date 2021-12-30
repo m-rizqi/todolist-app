@@ -1,4 +1,4 @@
-package com.rizqi.todolist.ui.view
+package com.rizqi.todolistapp.presentation.auth
 
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -38,12 +38,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import com.google.firebase.ktx.Firebase
 import com.rizqi.todolist.nav.Screen
-import com.rizqi.todolist.viewmodel.DataStoreViewModel
+import com.rizqi.todolistapp.AppDataStoreViewModel
 import com.rizqi.todolistapp.R
 import com.rizqi.todolistapp.callback.FirebaseAuthCallbackFailed
 import com.rizqi.todolistapp.callback.FirebaseAuthCallbackSuccess
-import com.rizqi.todolistapp.repository.loginEmailPassword
-import com.rizqi.todolistapp.repository.model.User
+import com.rizqi.todolistapp.domain.loginEmailPassword
+import com.rizqi.todolistapp.domain.model.User
 import com.rizqi.todolistapp.ui.theme.*
 import java.lang.Exception
 
@@ -204,7 +204,8 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                               firebase = firebase,
                               firebaseAuthCallbackSuccess = object : FirebaseAuthCallbackSuccess {
                                   override fun onCallback(user: User) {
-                                      val dataStoreViewModel = ViewModelProvider(activity).get(DataStoreViewModel::class.java)
+                                      val dataStoreViewModel = ViewModelProvider(activity).get(
+                                          AppDataStoreViewModel::class.java)
                                       dataStoreViewModel.setLogin(true)
                                       user.id?.let { dataStoreViewModel.setUserId(it) }
                                       signinButtonLoading = false
