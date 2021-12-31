@@ -8,12 +8,14 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rizqi.todolist.nav.Screen
 import com.rizqi.todolist.nav.SetUpNavGraph
 import com.rizqi.todolistapp.ui.theme.Grey3
 
 class HomeActivity : ComponentActivity() {
     private lateinit var navHostController: NavHostController
+    @ExperimentalPagerApi
     @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

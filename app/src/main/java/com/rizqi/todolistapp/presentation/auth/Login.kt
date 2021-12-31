@@ -1,8 +1,12 @@
 package com.rizqi.todolistapp.presentation.auth
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -22,8 +26,10 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -34,21 +40,27 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
-import com.google.firebase.ktx.Firebase
 import com.rizqi.todolist.nav.Screen
-import com.rizqi.todolistapp.AppDataStoreViewModel
 import com.rizqi.todolistapp.R
-import com.rizqi.todolistapp.domain.model.User
 import com.rizqi.todolistapp.ui.theme.*
-import java.lang.Exception
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.rizqi.todolistapp.utils.LoadingState
+import com.rizqi.todolistapp.utils.getGoogleSignClient
 
 @ExperimentalComposeUiApi
 @Composable
-fun Login(activity : ComponentActivity, navHostController: NavHostController) {
-    val firebase = Firebase
-    ToDoListAppTheme() {
+fun Login(
+    activity : ComponentActivity,
+    navHostController: NavHostController,
+    viewModel: AuthViewModel = viewModel()
+) {
+    ToDoListAppTheme {
         var emailText by rememberSaveable {
             mutableStateOf("")
         }
@@ -60,9 +72,20 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
             FocusRequester()
         }
         val keyboardController = LocalSoftwareKeyboardController.current
-        var signinButtonLoading by remember { mutableStateOf(false)}
         BackHandler() {
-
+        }
+        var signInButtonRunning by remember{ mutableStateOf(false)}
+        var googleButtonRunning by remember{ mutableStateOf(false)}
+        val state by viewModel.loadingState.collectAsState()
+        val launcher = rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(it.data)
+            try{
+                val account = task.getResult(ApiException::class.java)!!
+                val credential = GoogleAuthProvider.getCredential(account.idToken!!,null)
+                viewModel.signWithCredential(credential)
+            }catch (e:ApiException){
+                Log.w(TAG, "Google Sign Failed", e)
+            }
         }
         Column(
             modifier = Modifier
@@ -194,7 +217,8 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 onClick = {
-                    navHostController.navigate(Screen.Home.route)
+                    signInButtonRunning = true
+                    viewModel.signInWithEmailAndPassword(emailText, passwordText)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -202,7 +226,7 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(backgroundColor = BlueSoft)
             ) {
-                if(signinButtonLoading){
+                if(signInButtonRunning){
                     CircularProgressIndicator(
                         modifier = Modifier
                             .size(38.dp),
@@ -269,15 +293,30 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                 ){}
             }
             Spacer(modifier = Modifier.height(32.dp))
-            IconButton(
-                onClick = {}
-            ) {
-                Icon(
-                    modifier = Modifier.size(55.dp),
-                    painter = painterResource(id = R.drawable.ic_google_logo),
-                    contentDescription = "Google Button",
-                    tint = Color.Unspecified,
+            val context = LocalContext.current
+            val token = stringResource(id = R.string.default_web_client_id)
+            if(googleButtonRunning){
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(38.dp),
+                    strokeWidth = 2.dp,
+                    color = BlueSoft
                 )
+            }else{
+                IconButton(
+                    onClick = {
+                        googleButtonRunning = true
+                        val googleClient = getGoogleSignClient(context, token)
+                        launcher.launch(googleClient.signInIntent)
+                    }
+                ) {
+                    Icon(
+                        modifier = Modifier.size(55.dp),
+                        painter = painterResource(id = R.drawable.ic_google_logo),
+                        contentDescription = "Google Button",
+                        tint = Color.Unspecified,
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(32.dp))
             Row() {
@@ -302,6 +341,25 @@ fun Login(activity : ComponentActivity, navHostController: NavHostController) {
                         fontSize = 12.sp
                     ),
                 )
+            }
+        }
+        when(state.status){
+            LoadingState.Status.SUCCESS -> {
+                Log.d("TAG", "status:succes")
+                googleButtonRunning = false
+                signInButtonRunning = false
+                navHostController.navigate(Screen.Home.route)
+            }
+            LoadingState.Status.IDLE -> {
+                Log.d("TAG", "status:idle")
+            }
+            LoadingState.Status.RUNNING -> {
+                Log.d("TAG", "status:running")
+            }
+            LoadingState.Status.FAILED -> {
+                googleButtonRunning = false
+                signInButtonRunning = false
+                Toast.makeText(LocalContext.current, "Sign In Failed : ${state.msg?:"Error"}", Toast.LENGTH_SHORT).show()
             }
         }
     }

@@ -10,6 +10,7 @@ val Teal200 = Color(0xFF03DAC5)
 // APP
 val BluePrimary = Color(0xFF0A2CF3)
 val BlueSoft = Color(0xFF3D53D6)
+val GreyGradient0 = Color(0xFFF6F7FA)
 val GreyGradient1 = Color(0xFFE6E9F1)
 val GreyGradient2 = Color(0xFFE7F1F9)
 val Grey1 = Color(0xFF777777)

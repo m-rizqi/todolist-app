@@ -6,10 +6,12 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rizqi.todolistapp.presentation.auth.Login
 import com.rizqi.todolistapp.presentation.auth.Register
 import com.rizqi.todolistapp.presentation.home.Home
 
+@ExperimentalPagerApi
 @ExperimentalComposeUiApi
 @Composable
 fun SetUpNavGraph(

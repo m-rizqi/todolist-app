@@ -230,7 +230,7 @@ fun TaskSection(scrollState: LazyListState, pagerState: PagerState) {
             .background(
                 brush = Brush.verticalGradient(
                     colors = listOf(
-                        GreyGradient1,
+                        GreyGradient0,
                         GreyGradient2
                     )
                 )

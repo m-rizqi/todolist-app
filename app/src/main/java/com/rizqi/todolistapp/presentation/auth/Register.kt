@@ -1,12 +1,19 @@
 package com.rizqi.todolistapp.presentation.auth
 
+import android.util.Log
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -17,6 +24,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -29,10 +37,16 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.rizqi.todolist.nav.Screen
 import com.rizqi.todolistapp.ui.theme.*
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.rizqi.todolistapp.utils.LoadingState
 
 @ExperimentalComposeUiApi
 @Composable
-fun Register(activity : ComponentActivity, navHostController: NavHostController) {
+fun Register(
+    activity : ComponentActivity,
+    navHostController: NavHostController,
+    viewModel: AuthViewModel = viewModel()
+) {
     activity.window.statusBarColor = GreyGradient1.hashCode()
     activity.window.navigationBarColor = GreyGradient2.hashCode()
     ToDoListAppTheme {
@@ -53,9 +67,9 @@ fun Register(activity : ComponentActivity, navHostController: NavHostController)
         }
         val keyboardController = LocalSoftwareKeyboardController.current
         var registerButtonLoading by remember { mutableStateOf(false)}
+        val state by viewModel.loadingState.collectAsState()
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
@@ -64,7 +78,7 @@ fun Register(activity : ComponentActivity, navHostController: NavHostController)
                         )
                     )
                 ),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Spacer(modifier = Modifier.height(48.dp))
             Text(
@@ -229,7 +243,8 @@ fun Register(activity : ComponentActivity, navHostController: NavHostController)
             Spacer(modifier = Modifier.height(24.dp))
             Button(
                 onClick = {
-                    navHostController.navigate(Screen.Home.route)
+                    registerButtonLoading = true
+                    viewModel.createUserWithEmailAndPassword(emailText, passwordText)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
@@ -281,6 +296,24 @@ fun Register(activity : ComponentActivity, navHostController: NavHostController)
                         fontSize = 12.sp
                     ),
                 )
+            }
+            Spacer(modifier = Modifier.height(72.dp))
+        }
+        when(state.status){
+            LoadingState.Status.SUCCESS -> {
+                Log.d("TAG", "status:succes")
+                registerButtonLoading = false
+                navHostController.navigate(Screen.Home.route)
+            }
+            LoadingState.Status.IDLE -> {
+                Log.d("TAG", "status:idle")
+            }
+            LoadingState.Status.RUNNING -> {
+                Log.d("TAG", "status:running")
+            }
+            LoadingState.Status.FAILED -> {
+                registerButtonLoading = false
+                Toast.makeText(LocalContext.current, "Register Failed : ${state.msg?:"Error"}", Toast.LENGTH_SHORT).show()
             }
         }
     }
