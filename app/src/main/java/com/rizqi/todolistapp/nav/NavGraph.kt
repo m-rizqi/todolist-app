@@ -10,6 +10,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rizqi.todolistapp.presentation.auth.Login
 import com.rizqi.todolistapp.presentation.auth.Register
 import com.rizqi.todolistapp.presentation.home.Home
+import com.rizqi.todolistapp.presentation.task.NewTask
 
 @ExperimentalPagerApi
 @ExperimentalComposeUiApi
@@ -37,6 +38,11 @@ fun SetUpNavGraph(
             route = Screen.Home.route
         ){
             Home(activity, navHostController)
+        }
+        composable(
+            route = Screen.NewTask.route
+        ){
+            NewTask(activity, navHostController)
         }
     }
 }

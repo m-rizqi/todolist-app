@@ -36,6 +36,7 @@ import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.pager.*
+import com.rizqi.todolist.nav.Screen
 import com.rizqi.todolistapp.R
 import com.rizqi.todolistapp.ui.theme.*
 import kotlinx.coroutines.launch
@@ -56,7 +57,7 @@ fun Home(activity: ComponentActivity, navHostController: NavHostController) {
         
     }
     Box() {
-        TaskSection(scrollState, pagerState)
+        TaskSection(scrollState, pagerState, navHostController)
         AppBar(scrollState, pagerState)
     }
 }
@@ -223,7 +224,7 @@ fun AppBar(scrollState: LazyListState, pagerState: PagerState) {
 
 @ExperimentalPagerApi
 @Composable
-fun TaskSection(scrollState: LazyListState, pagerState: PagerState) {
+fun TaskSection(scrollState: LazyListState, pagerState: PagerState, navHostController: NavHostController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -295,7 +296,9 @@ fun TaskSection(scrollState: LazyListState, pagerState: PagerState) {
             .padding(20.dp)
         ){
             Button(
-                onClick = {},
+                onClick = {
+                          navHostController.navigate(Screen.NewTask.route)
+                },
                 modifier = Modifier
                     .size(56.dp)
                     .align(Alignment.BottomEnd),

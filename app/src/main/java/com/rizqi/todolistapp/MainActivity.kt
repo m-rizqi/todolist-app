@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
             ToDoListAppTheme {
                 Scaffold(backgroundColor = Color.White) {}
                 val user = Firebase.auth.currentUser
-                if (user == null){
+                if (user != null){
                     startActivity(Intent(this, HomeActivity::class.java))
                 }else{
                     startActivity(Intent(this, AuthActivity::class.java))

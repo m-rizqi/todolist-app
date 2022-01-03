@@ -244,7 +244,7 @@ fun Register(
             Button(
                 onClick = {
                     registerButtonLoading = true
-                    viewModel.createUserWithEmailAndPassword(emailText, passwordText)
+                    viewModel.createUserWithEmailAndPassword(nameText,emailText, passwordText)
                 },
                 modifier = Modifier
                     .fillMaxWidth()
