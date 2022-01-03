@@ -70,7 +70,7 @@ fun TaskCard(
                 }
             }
             Text(
-                text = formatLongToDate(task.timestamp),
+                text = "formatLongToDate(task.timestamp)",
                 style = TextStyle(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Normal,
