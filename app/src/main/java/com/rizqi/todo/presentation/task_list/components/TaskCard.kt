@@ -2,6 +2,7 @@ package com.rizqi.todo.presentation.task_list.components
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -9,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -18,13 +20,12 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.rizqi.todo.R
 import com.rizqi.todo.domain.model.Task
-import com.rizqi.todo.presentation.task_list.formatLongToDate
 import com.rizqi.todo.ui.theme.GreyE8
 import com.rizqi.todo.ui.theme.OrangeInProgress
 import com.rizqi.todo.ui.theme.Poppins
 import com.rizqi.todo.ui.theme.Shapes
+import com.rizqi.todo.viewmodel.formatTimeStamp
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterialApi
 @Composable
 fun TaskCard(
@@ -32,10 +33,10 @@ fun TaskCard(
 ) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        elevation = 2.dp,
+        elevation = 5.dp,
         onClick = {},
         shape = RoundedCornerShape(8.dp),
-        backgroundColor = Color.White
+        backgroundColor = Color.White,
     ) {
         Column(
             modifier = Modifier
@@ -69,8 +70,9 @@ fun TaskCard(
                     )
                 }
             }
+            Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = "formatLongToDate(task.timestamp)",
+                text = formatTimeStamp(task.timestamp),
                 style = TextStyle(
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Normal,
@@ -92,12 +94,11 @@ fun TaskCard(
                     disabledInactiveTickColor = GreyE8
                 )
             )
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(8.dp))
         }
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @ExperimentalMaterialApi
 @Preview(
     name = "Task Card #1",
@@ -105,7 +106,16 @@ fun TaskCard(
 )
 @Composable
 fun TaskCardPreview() {
-    TaskCard(
-        task = Task(1, "Task Card #1","Lorem Ipsum", System.currentTimeMillis())
-    )
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+            .background(Color.White),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        TaskCard(
+            task = Task(1, "Task Card #1","Lorem Ipsum", System.currentTimeMillis())
+        )
+    }
 }

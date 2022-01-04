@@ -16,4 +16,8 @@ val OrangeInProgress = Color(0xFFF56B30)
 val RedToDo = Color(0xFFF50B0B)
 val GreenComplete = Color(0xFF4CAF50)
 val GreyE8 = Color(0xFFAEAEAE)
+val GreyC4 = Color(0xFFC4C4C4)
+val Grey60 = Color(0xFF606060)
+
+
 

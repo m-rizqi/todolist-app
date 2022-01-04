@@ -13,6 +13,8 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -73,4 +75,10 @@ class TaskViewModel @Inject constructor(
             .launchIn(viewModelScope)
     }
 
+}
+
+fun formatTimeStamp(timestamp: Long) : String{
+    val date = Date(timestamp)
+    val formatter = SimpleDateFormat("EEEE, d MMM yyyy HH:mm")
+    return formatter.format(date)
 }
