@@ -30,8 +30,7 @@ import com.rizqi.todo.ui.theme.BlueGradient2
 fun TaskListSection(
     scrollState: LazyListState,
     pagerState: PagerState,
-    navHostController: NavHostController,
-    appBarExtendedHeight: Dp = 48.dp
+    appBarExtendedHeight: Dp = 125.dp
 ) {
     Box(
         modifier = Modifier
@@ -82,7 +81,6 @@ fun TaskListSectionPreview() {
         TaskListSection(
             rememberLazyListState(),
             rememberPagerState(),
-            NavHostController(LocalContext.current)
         )
     }
 }

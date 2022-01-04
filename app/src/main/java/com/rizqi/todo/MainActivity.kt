@@ -11,13 +11,16 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rizqi.todo.domain.model.Task
+import com.rizqi.todo.presentation.task_list.TaskListScreen
 import com.rizqi.todo.presentation.task_list.components.TaskCard
 import com.rizqi.todo.ui.theme.ToDoTheme
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 
 class MainActivity : ComponentActivity() {
+    @ExperimentalPagerApi
     @ExperimentalMaterialApi
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,25 +28,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             ToDoTheme {
                 // A surface container using the 'background' color from the theme
-                Surface(color = MaterialTheme.colors.background) {
-                    Greeting("Android")
-                    TaskCard(task = Task(1, "Week 1 College", "asdjs",LocalDateTime.now().toEpochSecond(
-                        ZoneOffset.UTC)))
-                }
+                TaskListScreen(this)
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String) {
-    Text(text = "Hello $name!")
-}
-
-@Preview(showBackground = true)
-@Composable
-fun DefaultPreview() {
-    ToDoTheme {
-        Greeting("Android")
     }
 }

@@ -69,6 +69,7 @@ fun TaskCard(
                         tint = Color.Black
                     )
                 }
+                Spacer(modifier = Modifier.width(8.dp))
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(

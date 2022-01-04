@@ -35,7 +35,7 @@ import kotlin.math.min
 @Composable
 fun TaskAppBar(
     appBarCollapsedHeight: Dp = 48.dp,
-    appBarExtendedHeight: Dp = 185.dp,
+    appBarExtendedHeight: Dp = 125.dp,
     scrollState: LazyListState,
     pagerState: PagerState
 ) {
@@ -84,7 +84,7 @@ fun TaskAppBar(
                             style = TextStyle(
                                 fontFamily = Poppins,
                                 fontWeight = FontWeight.SemiBold,
-                                fontSize = 18.sp,
+                                fontSize = 24.sp,
                                 color = Color.Black
                             )
                         )
