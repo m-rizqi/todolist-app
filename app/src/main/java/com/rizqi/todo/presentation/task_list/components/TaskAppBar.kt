@@ -1,5 +1,6 @@
 package com.rizqi.todo.presentation.task_list.components
 
+import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.R
@@ -21,25 +22,32 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import androidx.core.graphics.Insets.max
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.rizqi.todo.ui.theme.*
+import com.rizqi.todo.viewmodel.TaskEvent
+import com.rizqi.todo.viewmodel.TaskState
+import com.rizqi.todo.viewmodel.TaskViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
 
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Composable
 fun TaskAppBar(
     appBarCollapsedHeight: Dp = 48.dp,
     appBarExtendedHeight: Dp = 125.dp,
     scrollState: LazyListState,
-    pagerState: PagerState
+    pagerState: PagerState,
+    state: TaskState,
+    viewModel: TaskViewModel
 ) {
-    val contentHeight = appBarExtendedHeight - appBarCollapsedHeight
+    val contentHeight = (if(state.isOrderSectionVisible) 225.dp else appBarExtendedHeight) - appBarCollapsedHeight
     val maxOffset = with(LocalDensity.current){
         contentHeight.roundToPx()
     } - LocalWindowInsets.current.systemBars.layoutInsets.top
@@ -51,7 +59,7 @@ fun TaskAppBar(
         backgroundColor = Color.White,
         modifier = Modifier
             .height(
-                appBarExtendedHeight
+                if(state.isOrderSectionVisible) 225.dp else appBarExtendedHeight
             )
             .offset {
                 IntOffset(x = 0, y = -offset)
@@ -105,16 +113,33 @@ fun TaskAppBar(
                                 )
                             }
                             IconButton(
-                                onClick = { /*TODO*/ },
+                                onClick = {
+                                          viewModel.onEvent(TaskEvent.ToggleOrderSection)
+                                },
                                 modifier = Modifier.size(28.dp),
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Sort,
-                                    contentDescription = "More",
+                                    contentDescription = "Sort",
                                     tint = Color.Gray
                                 )
                             }
                         }
+                    }
+                    AnimatedVisibility(
+                        visible = state.isOrderSectionVisible,
+                        enter = fadeIn() + slideInVertically(),
+                        exit = fadeOut() + slideOutVertically()
+                    ) {
+                        OrderSection(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = 8.dp),
+                            taskOrder = state.taskOrder,
+                            onOrderChange = {
+                                viewModel.onEvent(TaskEvent.Order(it))
+                            }
+                        )
                     }
                 }
             }
@@ -180,6 +205,7 @@ fun TaskAppBar(
     }
 }
 
+@ExperimentalAnimationApi
 @ExperimentalPagerApi
 @Preview()
 @Composable
@@ -191,7 +217,9 @@ fun TaskAppBarPreview() {
     ) {
         TaskAppBar(
             scrollState = rememberLazyListState(),
-            pagerState = rememberPagerState()
+            pagerState = rememberPagerState(),
+            state = TaskState(),
+            viewModel = hiltViewModel()
         )
     }
 }

@@ -65,7 +65,7 @@ class TaskViewModel @Inject constructor(
 
     private fun getAlltask(taskOrder: TaskOrder){
         getTaskJob?.cancel()
-        getTaskJob = taskUseCases.getAllTask(taskOrder)
+        getTaskJob = taskUseCases.getAllTasks(taskOrder)
             .onEach { task ->
                 _state.value = state.value.copy(
                     tasks = task,

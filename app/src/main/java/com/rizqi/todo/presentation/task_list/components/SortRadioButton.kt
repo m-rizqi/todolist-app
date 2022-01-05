@@ -11,10 +11,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.rizqi.todo.ui.theme.BlueSoft
 import com.rizqi.todo.ui.theme.GreyC4
+import com.rizqi.todo.ui.theme.Poppins
 
 @Composable
 fun SortRadioButton(
@@ -35,7 +39,12 @@ fun SortRadioButton(
                 unselectedColor = GreyC4
             )
         )
-        Text(text = text, style = MaterialTheme.typography.body1)
+        Text(text = text, style = TextStyle(
+            fontFamily = Poppins,
+            color = Color.Black,
+            fontWeight = FontWeight.Normal,
+            fontSize = 14.sp
+        ))
     }
 }
 

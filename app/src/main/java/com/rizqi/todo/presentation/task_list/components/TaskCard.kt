@@ -23,16 +23,17 @@ import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.ui.theme.GreyE8
 import com.rizqi.todo.ui.theme.OrangeInProgress
 import com.rizqi.todo.ui.theme.Poppins
-import com.rizqi.todo.ui.theme.Shapes
 import com.rizqi.todo.viewmodel.formatTimeStamp
 
 @ExperimentalMaterialApi
 @Composable
 fun TaskCard(
-    task: Task
+    task: Task,
+    modifier: Modifier = Modifier,
+    onDeleteClick: () -> Unit
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         elevation = 5.dp,
         onClick = {},
         shape = RoundedCornerShape(8.dp),
@@ -45,31 +46,34 @@ fun TaskCard(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = task.title,
-                    style = TextStyle(
-                        fontFamily = Poppins,
-                        fontWeight = FontWeight.Medium,
-                        color = Color.Black,
-                        fontSize = 18.sp
+                Row(
+                    modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ){
+                    Text(
+                        text = task.title,
+                        style = TextStyle(
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.Medium,
+                            color = Color.Black,
+                            fontSize = 18.sp
+                        )
                     )
-                )
-                
-                IconButton(
-                    modifier = Modifier.size(14.dp),
-                    onClick = { /*TODO*/ }
-                ) {
-                    Icon(
+
+                    IconButton(
                         modifier = Modifier.size(14.dp),
-                        painter = painterResource(id = R.drawable.trash_alt_regular),
-                        contentDescription = "Delete",
-                        tint = Color.Black
-                    )
+                        onClick = { /*TODO*/ }
+                    ) {
+                        Icon(
+                            modifier = Modifier.size(14.dp),
+                            painter = painterResource(id = R.drawable.trash_alt_regular),
+                            contentDescription = "Delete",
+                            tint = Color.Black
+                        )
+                    }
                 }
-                Spacer(modifier = Modifier.width(8.dp))
             }
             Spacer(modifier = Modifier.height(8.dp))
             Text(
@@ -116,7 +120,8 @@ fun TaskCardPreview() {
         verticalArrangement = Arrangement.Center
     ) {
         TaskCard(
-            task = Task(1, "Task Card #1","Lorem Ipsum", System.currentTimeMillis())
+            task = Task(1, "Task Card #1","Lorem Ipsum", System.currentTimeMillis()),
+            onDeleteClick = {}
         )
     }
 }
