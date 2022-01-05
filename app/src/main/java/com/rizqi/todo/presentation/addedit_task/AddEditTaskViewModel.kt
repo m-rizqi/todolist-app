@@ -1,5 +1,8 @@
 package com.rizqi.todo.presentation.addedit_task
 
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
+import android.content.Context
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
@@ -12,6 +15,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -19,14 +24,13 @@ class AddEditTaskViewModel @Inject constructor(
     private val taskUseCases: TaskUseCases,
     savedStateHandle: SavedStateHandle
 ) : ViewModel(){
-    private val _taskTitle = mutableStateOf(TaskTextFieldState(
-        hint = "Enter title"
-    ))
+    private val _taskTitle = mutableStateOf(TaskTextFieldState())
     val taskTitle: State<TaskTextFieldState> = _taskTitle
 
-    private val _taskContent = mutableStateOf(TaskTextFieldState(
-        hint = "Enter some content"
-    ))
+    private val _taskDueDate = mutableStateOf(0L)
+    val taskDueDate: State<Long> = _taskDueDate
+
+    private val _taskContent = mutableStateOf(TaskTextFieldState())
     val taskContent: State<TaskTextFieldState> = _taskContent
 
     private val _eventFlow = MutableSharedFlow<UiEvent>()
@@ -42,11 +46,10 @@ class AddEditTaskViewModel @Inject constructor(
                         currentTaskId = task.id
                         _taskTitle.value = taskTitle.value.copy(
                             text = task.title,
-                            isHintVisible = false
                         )
+                        _taskDueDate.value = task.timestamp
                         _taskContent.value = taskContent.value.copy(
                             text = task.content,
-                            isHintVisible = false
                         )
                     }
                 }
@@ -54,18 +57,40 @@ class AddEditTaskViewModel @Inject constructor(
         }
     }
 
+    fun selectDateTime(context: Context){
+        var time = ""
+        val currentDateTime = Calendar.getInstance()
+        val startYear = currentDateTime.get(Calendar.YEAR)
+        val startMonth = currentDateTime.get(Calendar.MONTH)
+        val startDay = currentDateTime.get(Calendar.DAY_OF_MONTH)
+        val startHour = currentDateTime.get(Calendar.HOUR_OF_DAY)
+        val startMinute = currentDateTime.get(Calendar.MINUTE)
+        DatePickerDialog(context, { _, year, month, day ->
+            TimePickerDialog(context, { _, hour, minute ->
+                val pickedDateTime = Calendar.getInstance()
+                pickedDateTime.set(year, month, day, hour, minute)
+                val monthStr: String
+                if ((month + 1).toString().length == 1) {
+                    monthStr = "0${month + 1}"
+                } else {
+                    monthStr = month.toString()
+                }
+                time = "$day/$monthStr/${year} $hour:$minute"
+                val formatter = SimpleDateFormat("dd/MM/yyyy HH:mm")
+                val date = formatter.parse(time)
+                _taskDueDate.value = date.time
+            }, startHour, startMinute, true).show()
+        }, startYear, startMonth, startDay).show()
+    }
+
+    fun dateFormatter(timestamp: Long): String{
+        val date = Date(timestamp)
+        val format = SimpleDateFormat("EEEE, d MMMM yyyy  HH:mm")
+        return format.format(date)
+    }
+
     fun onEvent(event: AddEditTaskEvent){
         when(event){
-            is AddEditTaskEvent.ChangeContentFocus -> {
-                _taskContent.value = _taskContent.value.copy(
-                    isHintVisible = !event.focusState.isFocused && _taskContent.value.text.isBlank()
-                )
-            }
-            is AddEditTaskEvent.ChangeTitleFocus -> {
-                _taskTitle.value = taskTitle.value.copy(
-                    isHintVisible = !event.focusState.isFocused && taskTitle.value.text.isBlank()
-                )
-            }
             is AddEditTaskEvent.EnteredContent -> {
                 _taskContent.value = _taskContent.value.copy(
                     text = event.value
@@ -83,7 +108,7 @@ class AddEditTaskViewModel @Inject constructor(
                             Task(
                                 title = taskTitle.value.text,
                                 content = taskTitle.value.text,
-                                timestamp = System.currentTimeMillis(),
+                                timestamp = taskDueDate.value,
                                 id = currentTaskId
                             )
                         )

@@ -3,7 +3,6 @@ package com.rizqi.todo.presentation.task_list.components
 import androidx.compose.animation.*
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.R
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
@@ -21,7 +20,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import androidx.core.graphics.Insets.max
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
@@ -29,9 +27,9 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.rizqi.todo.ui.theme.*
-import com.rizqi.todo.viewmodel.TaskEvent
-import com.rizqi.todo.viewmodel.TaskState
-import com.rizqi.todo.viewmodel.TaskViewModel
+import com.rizqi.todo.presentation.task_list.TaskEvent
+import com.rizqi.todo.presentation.task_list.TaskState
+import com.rizqi.todo.presentation.task_list.TaskViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min

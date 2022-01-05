@@ -53,6 +53,7 @@ fun SetUpNavGraph(
         ){
             val isNewTask = it.arguments?.getBoolean("isNewTask") ?: true
             AddEditTaskScreen(
+                activity = activity,
                 navController = navController,
                 isNewTask = isNewTask
             )

@@ -9,12 +9,6 @@ class InsertTask(
 ) {
     @Throws(InvalidTaskException::class)
     suspend operator fun invoke(task: Task){
-        if(task.title.isBlank()){
-            throw InvalidTaskException.TitleInvalidTaskException
-        }
-        if(task.timestamp == 0L){
-            throw InvalidTaskException.DateInvalidTaskException
-        }
         repository.insertTask(task)
     }
 }

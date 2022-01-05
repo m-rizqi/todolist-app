@@ -1,7 +1,5 @@
 package com.rizqi.todo.presentation.task_list.components
 
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,8 +7,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -18,19 +14,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.rizqi.todo.R
 import com.rizqi.todo.domain.model.Task
+import com.rizqi.todo.presentation.task_list.TaskViewModel
 import com.rizqi.todo.ui.theme.GreyE8
 import com.rizqi.todo.ui.theme.OrangeInProgress
 import com.rizqi.todo.ui.theme.Poppins
-import com.rizqi.todo.viewmodel.formatTimeStamp
+import com.rizqi.todo.presentation.task_list.formatTimeStamp
 
 @ExperimentalMaterialApi
 @Composable
 fun TaskCard(
     task: Task,
     modifier: Modifier = Modifier,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    viewModel: TaskViewModel
 ) {
    Box(modifier = modifier){
        Card(
@@ -47,7 +46,9 @@ fun TaskCard(
                    modifier = Modifier.fillMaxWidth(),
                ) {
                    Row(
-                       modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
+                       modifier = Modifier
+                           .fillMaxWidth()
+                           .padding(end = 8.dp),
                        verticalAlignment = Alignment.CenterVertically,
                        horizontalArrangement = Arrangement.SpaceBetween
                    ){
@@ -74,17 +75,17 @@ fun TaskCard(
                        }
                    }
                }
-               Spacer(modifier = Modifier.height(8.dp))
+               Spacer(modifier = Modifier.height(3.dp))
                Text(
-                   text = formatTimeStamp(task.timestamp),
+                   text = if(task.timestamp == 0L) "Due date hasn't set yet" else viewModel.dateFormatter(task.timestamp),
                    style = TextStyle(
                        fontFamily = Poppins,
                        fontWeight = FontWeight.Normal,
-                       color = GreyE8,
+                       color = if(task.timestamp == 0L) Color.Red else GreyE8,
                        fontSize = 12.sp
                    )
                )
-               Spacer(modifier = Modifier.height(8.dp))
+               Spacer(modifier = Modifier.height(3.dp))
                Slider(
                    modifier = Modifier.fillMaxWidth(),
                    value = 0.25f,
@@ -121,7 +122,8 @@ fun TaskCardPreview() {
     ) {
         TaskCard(
             task = Task(1, "Task Card #1","Lorem Ipsum", System.currentTimeMillis()),
-            onDeleteClick = {}
+            onDeleteClick = {},
+            viewModel = hiltViewModel()
         )
     }
 }

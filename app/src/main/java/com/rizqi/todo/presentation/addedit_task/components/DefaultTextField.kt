@@ -39,9 +39,8 @@ fun DefaultTextField(
     singleLine: Boolean = false,
     leadingIcon: ImageVector,
     modifier: Modifier = Modifier,
-    isHintVisible: Boolean = true,
+    readOnly: Boolean = false,
     onValueChange: (String) -> Unit,
-    onFocusChange: (FocusState) -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     Box(
@@ -49,10 +48,10 @@ fun DefaultTextField(
     ){
         TextField(
             value = text,
+            readOnly = readOnly,
             onValueChange = onValueChange,
             modifier = Modifier
-                .fillMaxWidth()
-                .onFocusChanged { onFocusChange(it) },
+                .fillMaxWidth(),
             leadingIcon = {
                 Icon(
                     imageVector = leadingIcon,
@@ -100,6 +99,6 @@ fun DefaultTextFieldScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        DefaultTextField(text = "", hint = "", leadingIcon = Icons.Default.Home, onValueChange = {}, onFocusChange = {})
+        DefaultTextField(text = "", hint = "", leadingIcon = Icons.Default.Home, onValueChange = {})
     }
 }

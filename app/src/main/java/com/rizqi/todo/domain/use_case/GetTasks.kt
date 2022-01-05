@@ -11,7 +11,7 @@ class GetTasks(
     private val repository: TaskRepository
 ) {
     operator fun invoke(
-        taskOrder: TaskOrder = TaskOrder.Date(OrderType.Descending)
+        taskOrder: TaskOrder = TaskOrder.Date(OrderType.Ascending)
     ) : Flow<List<Task>>{
         return repository.getAllTasks().map { task ->
             when(taskOrder.orderType){

@@ -18,7 +18,7 @@ import com.rizqi.todo.ui.theme.Poppins
 @Composable
 fun OrderSection(
     modifier: Modifier = Modifier,
-    taskOrder: TaskOrder = TaskOrder.Date(OrderType.Descending),
+    taskOrder: TaskOrder = TaskOrder.Date(OrderType.Ascending),
     onOrderChange: (TaskOrder) -> Unit
 ) {
     Column(

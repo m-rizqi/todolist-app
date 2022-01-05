@@ -25,9 +25,9 @@ import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
 import com.rizqi.todo.presentation.navigation.Screen
 import com.rizqi.todo.ui.theme.BlueGradient2
-import com.rizqi.todo.viewmodel.TaskEvent
-import com.rizqi.todo.viewmodel.TaskState
-import com.rizqi.todo.viewmodel.TaskViewModel
+import com.rizqi.todo.presentation.task_list.TaskEvent
+import com.rizqi.todo.presentation.task_list.TaskState
+import com.rizqi.todo.presentation.task_list.TaskViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
@@ -76,6 +76,7 @@ fun TaskListSection(
                                             route = Screen.AddEditTaskScreen.route + "?taskId=${task.id}&isNewTask=${false}"
                                         )
                                     },
+                                viewModel = viewModel,
                                 onDeleteClick = {
                                     viewModel.onEvent(TaskEvent.DeleteTask(task))
                                     scope.launch {

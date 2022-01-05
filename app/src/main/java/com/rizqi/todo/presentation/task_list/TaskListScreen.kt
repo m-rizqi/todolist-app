@@ -22,7 +22,6 @@ import com.rizqi.todo.presentation.task_list.components.TaskListSection
 import com.rizqi.todo.ui.theme.BlueGradient2
 import com.rizqi.todo.ui.theme.BlueSoft
 import com.rizqi.todo.ui.theme.GreyC4
-import com.rizqi.todo.viewmodel.TaskViewModel
 
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi

@@ -1,9 +1,13 @@
 package com.rizqi.todo.presentation.addedit_task
 
+import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.LineWeight
 import androidx.compose.runtime.Composable
@@ -13,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,24 +27,29 @@ import androidx.navigation.NavController
 import com.rizqi.todo.presentation.addedit_task.components.DefaultTextField
 import kotlinx.coroutines.flow.collectLatest
 import com.rizqi.todo.ui.theme.Poppins
+import com.rizqi.todo.presentation.task_list.formatTimeStamp
 
 @ExperimentalComposeUiApi
 @Composable
 fun AddEditTaskScreen(
+    activity: Activity,
     navController: NavController,
     viewModel: AddEditTaskViewModel = hiltViewModel(),
     isNewTask: Boolean
 ) {
+    activity.window.navigationBarColor = Color.White.hashCode()
     val titleState = viewModel.taskTitle.value
+    val dueDateState = viewModel.taskDueDate.value
     val contentState = viewModel.taskContent.value
     val scaffoldState = rememberScaffoldState()
     val scope =  rememberCoroutineScope()
+    val context = LocalContext.current
     LaunchedEffect(key1 = true){
         viewModel.eventFlow.collectLatest { event -> 
             when(event){
                 is AddEditTaskViewModel.UiEvent.ShowSnackbar -> {
                     scaffoldState.snackbarHostState.showSnackbar(
-                        message = event.message
+                        message = if(event.message.isBlank()) "Title is required" else event.message
                     )
                 }
                 is AddEditTaskViewModel.UiEvent.SaveNote ->{
@@ -83,7 +93,7 @@ fun AddEditTaskScreen(
                     )
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(28.dp))
             DefaultTextField(
                 text = titleState.text,
                 hint = "Title",
@@ -91,13 +101,32 @@ fun AddEditTaskScreen(
                 onValueChange = {
                     viewModel.onEvent(AddEditTaskEvent.EnteredTitle(it))
                 },
-                onFocusChange = {
-                    viewModel.onEvent(AddEditTaskEvent.ChangeTitleFocus(it))
-                },
                 singleLine = true,
                 modifier = Modifier.fillMaxWidth()
             )
-            Spacer(modifier = Modifier.height(28.dp))
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(modifier = Modifier.fillMaxWidth()){
+                DefaultTextField(
+                    text = if (dueDateState == 0L) "" else viewModel.dateFormatter(dueDateState),
+                    hint = "Date",
+                    readOnly = true,
+                    leadingIcon = Icons.Filled.CalendarToday,
+                    onValueChange = {},
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.TopStart)
+                )
+                Box(modifier = Modifier
+                    .matchParentSize()
+                    .background(Color.Transparent)
+                    .align(Alignment.TopStart)
+                    .clickable {
+                        viewModel.selectDateTime(context)
+                    }
+                )
+            }
+            Spacer(modifier = Modifier.height(10.dp))
             DefaultTextField(
                 text = contentState.text,
                 hint = "Content",
@@ -105,10 +134,9 @@ fun AddEditTaskScreen(
                 onValueChange = {
                     viewModel.onEvent(AddEditTaskEvent.EnteredContent(it))
                 },
-                onFocusChange = {
-                    viewModel.onEvent(AddEditTaskEvent.ChangeContentFocus(it))
-                },
-                modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight()
             )
         }
     }

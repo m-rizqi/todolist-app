@@ -1,4 +1,4 @@
-package com.rizqi.todo.viewmodel
+package com.rizqi.todo.presentation.task_list
 
 import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.domain.util.TaskOrder

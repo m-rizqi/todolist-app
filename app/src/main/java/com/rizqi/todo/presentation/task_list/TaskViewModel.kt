@@ -1,4 +1,4 @@
-package com.rizqi.todo.viewmodel
+package com.rizqi.todo.presentation.task_list
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
@@ -30,7 +30,13 @@ class TaskViewModel @Inject constructor(
     private var getTaskJob: Job? = null
 
     init {
-        getAlltask(TaskOrder.Date(OrderType.Descending))
+        getAlltask(TaskOrder.Date(OrderType.Ascending))
+    }
+
+    fun dateFormatter(timestamp: Long): String{
+        val date = Date(timestamp)
+        val format = SimpleDateFormat("EEEE, d MMMM yyyy  HH:mm")
+        return format.format(date)
     }
 
     fun onEvent(event: TaskEvent){
