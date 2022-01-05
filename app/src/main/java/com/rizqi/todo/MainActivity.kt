@@ -11,10 +11,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.rizqi.todo.domain.model.Task
+import com.rizqi.todo.presentation.navigation.SetUpNavGraph
 import com.rizqi.todo.presentation.task_list.TaskListScreen
 import com.rizqi.todo.presentation.task_list.components.TaskCard
 import com.rizqi.todo.ui.theme.ToDoTheme
@@ -24,6 +27,7 @@ import java.time.ZoneOffset
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @ExperimentalComposeUiApi
     @ExperimentalAnimationApi
     @ExperimentalPagerApi
     @ExperimentalMaterialApi
@@ -31,10 +35,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            ToDoTheme {
-                // A surface container using the 'background' color from the theme
-                TaskListScreen(this, NavController(this))
-            }
+            val navController = rememberNavController()
+            SetUpNavGraph(navController = navController, activity = this)
         }
     }
 }

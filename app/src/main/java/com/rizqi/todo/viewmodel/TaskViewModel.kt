@@ -41,7 +41,6 @@ class TaskViewModel @Inject constructor(
                     return
                 }
                 getAlltask(event.taskOrder)
-
             }
             is TaskEvent.DeleteTask -> {
                 viewModelScope.launch {

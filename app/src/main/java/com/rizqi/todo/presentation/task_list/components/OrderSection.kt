@@ -45,7 +45,7 @@ fun OrderSection(
             SortRadioButton(
                 text = "Title",
                 selected = taskOrder is TaskOrder.Title,
-                onSelect = { onOrderChange(TaskOrder.Date(taskOrder.orderType)) }
+                onSelect = { onOrderChange(TaskOrder.Title(taskOrder.orderType)) }
             )
         }
         Row(

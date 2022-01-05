@@ -32,76 +32,76 @@ fun TaskCard(
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit
 ) {
-    Card(
-        modifier = modifier,
-        elevation = 5.dp,
-        onClick = {},
-        shape = RoundedCornerShape(8.dp),
-        backgroundColor = Color.White,
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(8.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        text = task.title,
-                        style = TextStyle(
-                            fontFamily = Poppins,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.Black,
-                            fontSize = 18.sp
-                        )
-                    )
+   Box(modifier = modifier){
+       Card(
+           elevation = 5.dp,
+           shape = RoundedCornerShape(8.dp),
+           backgroundColor = Color.White,
+       ) {
+           Column(
+               modifier = Modifier
+                   .fillMaxWidth()
+                   .padding(8.dp)
+           ) {
+               Row(
+                   modifier = Modifier.fillMaxWidth(),
+               ) {
+                   Row(
+                       modifier = Modifier.fillMaxWidth().padding(end = 8.dp),
+                       verticalAlignment = Alignment.CenterVertically,
+                       horizontalArrangement = Arrangement.SpaceBetween
+                   ){
+                       Text(
+                           text = task.title,
+                           style = TextStyle(
+                               fontFamily = Poppins,
+                               fontWeight = FontWeight.Medium,
+                               color = Color.Black,
+                               fontSize = 18.sp
+                           )
+                       )
 
-                    IconButton(
-                        modifier = Modifier.size(14.dp),
-                        onClick = { /*TODO*/ }
-                    ) {
-                        Icon(
-                            modifier = Modifier.size(14.dp),
-                            painter = painterResource(id = R.drawable.trash_alt_regular),
-                            contentDescription = "Delete",
-                            tint = Color.Black
-                        )
-                    }
-                }
-            }
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = formatTimeStamp(task.timestamp),
-                style = TextStyle(
-                    fontFamily = Poppins,
-                    fontWeight = FontWeight.Normal,
-                    color = GreyE8,
-                    fontSize = 12.sp
-                )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-            Slider(
-                modifier = Modifier.fillMaxWidth(),
-                value = 0.25f,
-                enabled = false,
-                valueRange = 0f..1f,
-                onValueChange = {},
-                colors = SliderDefaults.colors(
-                    thumbColor = Color.Transparent,
-                    disabledThumbColor = Color.Transparent,
-                    disabledActiveTrackColor = OrangeInProgress,
-                    disabledInactiveTickColor = GreyE8
-                )
-            )
-            Spacer(modifier = Modifier.height(8.dp))
-        }
-    }
+                       IconButton(
+                           modifier = Modifier.size(14.dp),
+                           onClick = onDeleteClick
+                       ) {
+                           Icon(
+                               modifier = Modifier.size(14.dp),
+                               painter = painterResource(id = R.drawable.trash_alt_regular),
+                               contentDescription = "Delete",
+                               tint = Color.Black
+                           )
+                       }
+                   }
+               }
+               Spacer(modifier = Modifier.height(8.dp))
+               Text(
+                   text = formatTimeStamp(task.timestamp),
+                   style = TextStyle(
+                       fontFamily = Poppins,
+                       fontWeight = FontWeight.Normal,
+                       color = GreyE8,
+                       fontSize = 12.sp
+                   )
+               )
+               Spacer(modifier = Modifier.height(8.dp))
+               Slider(
+                   modifier = Modifier.fillMaxWidth(),
+                   value = 0.25f,
+                   enabled = false,
+                   valueRange = 0f..1f,
+                   onValueChange = {},
+                   colors = SliderDefaults.colors(
+                       thumbColor = Color.Transparent,
+                       disabledThumbColor = Color.Transparent,
+                       disabledActiveTrackColor = OrangeInProgress,
+                       disabledInactiveTickColor = GreyE8
+                   )
+               )
+               Spacer(modifier = Modifier.height(8.dp))
+           }
+       }
+   }
 }
 
 @ExperimentalMaterialApi

@@ -13,17 +13,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.rememberPagerState
-import com.rizqi.todo.domain.model.Task
+import com.rizqi.todo.presentation.navigation.Screen
 import com.rizqi.todo.ui.theme.BlueGradient2
 import com.rizqi.todo.viewmodel.TaskEvent
 import com.rizqi.todo.viewmodel.TaskState
@@ -41,7 +41,8 @@ fun TaskListSection(
     state: TaskState,
     viewModel: TaskViewModel,
     scaffoldState: ScaffoldState,
-    scope : CoroutineScope
+    scope: CoroutineScope,
+    navController: NavController
 ) {
     Box(
         modifier = Modifier
@@ -71,7 +72,9 @@ fun TaskListSection(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .clickable {
-
+                                        navController.navigate(
+                                            route = Screen.AddEditTaskScreen.route + "?taskId=${task.id}&isNewTask=${false}"
+                                        )
                                     },
                                 onDeleteClick = {
                                     viewModel.onEvent(TaskEvent.DeleteTask(task))
@@ -109,7 +112,8 @@ fun TaskListSectionPreview() {
             state = TaskState(),
             viewModel = hiltViewModel(),
             scaffoldState = rememberScaffoldState(),
-            scope = rememberCoroutineScope()
+            scope = rememberCoroutineScope(),
+            navController = rememberNavController()
         )
     }
 }

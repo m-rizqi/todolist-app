@@ -5,7 +5,7 @@ import androidx.room.RoomDatabase
 import com.rizqi.todo.data.dao.TaskDao
 import com.rizqi.todo.domain.model.Task
 
-@Database(entities = [Task::class], version = 1)
+@Database(entities = [Task::class], version = 1, exportSchema = false)
 abstract class TaskDatabase : RoomDatabase(){
     abstract val taskDao: TaskDao
 
