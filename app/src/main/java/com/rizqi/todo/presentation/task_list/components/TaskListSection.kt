@@ -26,7 +26,7 @@ import com.google.accompanist.pager.rememberPagerState
 import com.rizqi.todo.presentation.navigation.Screen
 import com.rizqi.todo.ui.theme.BlueGradient2
 import com.rizqi.todo.presentation.task_list.TaskEvent
-import com.rizqi.todo.presentation.task_list.TaskState
+import com.rizqi.todo.presentation.task_list.TaskListState
 import com.rizqi.todo.presentation.task_list.TaskViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +38,7 @@ fun TaskListSection(
     scrollState: LazyListState,
     pagerState: PagerState,
     appBarExtendedHeight: Dp = 125.dp,
-    state: TaskState,
+    listState: TaskListState,
     viewModel: TaskViewModel,
     scaffoldState: ScaffoldState,
     scope: CoroutineScope,
@@ -58,7 +58,7 @@ fun TaskListSection(
     ){
         LazyColumn(
             modifier = Modifier.align(Alignment.TopCenter),
-            contentPadding = PaddingValues(top = if(state.isOrderSectionVisible) 225.dp else appBarExtendedHeight),
+            contentPadding = PaddingValues(top = if(listState.isOrderSectionVisible) 225.dp else appBarExtendedHeight),
             state = scrollState
         ) {
             item {
@@ -66,31 +66,61 @@ fun TaskListSection(
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-                        state.tasks.forEachIndexed { index, task ->
-                            TaskCard(
-                                task = task,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clickable {
-                                        navController.navigate(
-                                            route = Screen.AddEditTaskScreen.route + "?taskId=${task.id}&isNewTask=${false}"
-                                        )
-                                    },
-                                viewModel = viewModel,
-                                onDeleteClick = {
-                                    viewModel.onEvent(TaskEvent.DeleteTask(task))
-                                    scope.launch {
-                                        val result = scaffoldState.snackbarHostState.showSnackbar(
-                                            message = "Task deleted",
-                                            actionLabel = "undo"
-                                        )
-                                        if(result == SnackbarResult.ActionPerformed){
-                                            viewModel.onEvent(TaskEvent.RestoreTask)
+                        if(page == 0){
+                                listState.todoTasks.forEach { task ->
+                                    TaskCard(
+                                        task = task,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                navController.navigate(
+                                                    route = Screen.AddEditTaskScreen.route + "?taskId=${task.taskId}&isNewTask=${false}"
+                                                )
+                                            },
+                                        viewModel = viewModel,
+                                        onDeleteClick = {
+                                            viewModel.onEvent(TaskEvent.DeleteTask(task))
+                                            scope.launch {
+                                                val result = scaffoldState.snackbarHostState.showSnackbar(
+                                                    message = "Task deleted",
+                                                    actionLabel = "undo"
+                                                )
+                                                if(result == SnackbarResult.ActionPerformed){
+                                                    viewModel.onEvent(TaskEvent.RestoreTask)
+                                                }
+                                            }
                                         }
-                                    }
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
                                 }
-                            )
-                            Spacer(modifier = Modifier.height(10.dp))
+                            }
+                            else{
+                                listState.completeTasks.forEach{task ->
+                                    TaskCard(
+                                        task = task,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .clickable {
+                                                navController.navigate(
+                                                    route = Screen.AddEditTaskScreen.route + "?taskId=${task.taskId}&isNewTask=${false}"
+                                                )
+                                            },
+                                        viewModel = viewModel,
+                                        onDeleteClick = {
+                                            viewModel.onEvent(TaskEvent.DeleteTask(task))
+                                            scope.launch {
+                                                val result = scaffoldState.snackbarHostState.showSnackbar(
+                                                    message = "Task deleted",
+                                                    actionLabel = "undo"
+                                                )
+                                                if(result == SnackbarResult.ActionPerformed){
+                                                    viewModel.onEvent(TaskEvent.RestoreTask)
+                                                }
+                                            }
+                                        }
+                                    )
+                                    Spacer(modifier = Modifier.height(10.dp))
+                            }
                         }
                     }
                 }
@@ -110,7 +140,7 @@ fun TaskListSectionPreview() {
         TaskListSection(
             rememberLazyListState(),
             rememberPagerState(),
-            state = TaskState(),
+            listState = TaskListState(),
             viewModel = hiltViewModel(),
             scaffoldState = rememberScaffoldState(),
             scope = rememberCoroutineScope(),

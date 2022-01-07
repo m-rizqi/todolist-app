@@ -5,8 +5,11 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.LineWeight
@@ -25,9 +28,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.rizqi.todo.presentation.addedit_task.components.DefaultTextField
+import com.rizqi.todo.presentation.addedit_task.components.SubtaskItem
+import com.rizqi.todo.ui.theme.Grey7
 import kotlinx.coroutines.flow.collectLatest
 import com.rizqi.todo.ui.theme.Poppins
-import com.rizqi.todo.presentation.task_list.formatTimeStamp
 
 @ExperimentalComposeUiApi
 @Composable
@@ -41,6 +45,7 @@ fun AddEditTaskScreen(
     val titleState = viewModel.taskTitle.value
     val dueDateState = viewModel.taskDueDate.value
     val contentState = viewModel.taskContent.value
+    val subtaskState = viewModel.subtasks
     val scaffoldState = rememberScaffoldState()
     val scope =  rememberCoroutineScope()
     val context = LocalContext.current
@@ -138,6 +143,38 @@ fun AddEditTaskScreen(
                     .fillMaxWidth()
                     .fillMaxHeight()
             )
+            Spacer(modifier = Modifier.height(10.dp))
+//            val scrollState = rememberLazyListState()
+//            LazyColumn(
+//                modifier = Modifier.fillMaxWidth(),
+//                state = scrollState
+//            ){
+//                item {
+//                    subtaskState.value.forEachIndexed(){index, subtask ->
+//                        SubtaskItem(subtask = subtask, onValueChange = {}, onCheckedChange = {}){}
+//                    }
+//                }
+//            }
+            Row(
+                modifier = Modifier.fillMaxWidth().clickable{  },
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Start
+            ) {
+                Icon(
+                    modifier = Modifier.size(14.dp),
+                    imageVector = Icons.Filled.Add,
+                    contentDescription = "Add Subtask",
+                    tint = Grey7,
+                )
+                Text(
+                    text = "Add subtask",
+                    style = TextStyle(
+                        color = Grey7,
+                        fontFamily = Poppins,
+                        fontSize = 12.sp
+                    )
+                )
+            }
         }
     }
 }

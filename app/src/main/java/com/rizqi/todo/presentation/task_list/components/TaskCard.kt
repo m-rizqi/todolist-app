@@ -21,7 +21,6 @@ import com.rizqi.todo.presentation.task_list.TaskViewModel
 import com.rizqi.todo.ui.theme.GreyE8
 import com.rizqi.todo.ui.theme.OrangeInProgress
 import com.rizqi.todo.ui.theme.Poppins
-import com.rizqi.todo.presentation.task_list.formatTimeStamp
 
 @ExperimentalMaterialApi
 @Composable
@@ -88,7 +87,7 @@ fun TaskCard(
                Spacer(modifier = Modifier.height(3.dp))
                Slider(
                    modifier = Modifier.fillMaxWidth(),
-                   value = 0.25f,
+                   value = 0F,
                    enabled = false,
                    valueRange = 0f..1f,
                    onValueChange = {},

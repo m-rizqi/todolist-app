@@ -39,7 +39,10 @@ object AppModule {
             getAllTasks = GetTasks(repository),
             getTask = GetTask(repository),
             deleteTask = DeleteTask(repository),
-            insertTask = InsertTask(repository)
+            insertTask = InsertTask(repository),
+            getTaskWithSubtask = GetTaskWithSubtask(repository),
+            insertSubtask = InsertSubtask(repository),
+            deleteSubtask = DeleteSubtask(repository),
         )
     }
 }

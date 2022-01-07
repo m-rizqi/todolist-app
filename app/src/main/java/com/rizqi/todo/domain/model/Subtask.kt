@@ -4,12 +4,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class Task(
+data class Subtask(
     @PrimaryKey(autoGenerate = true)
-    val taskId: Long? = null,
-    val title: String,
-    val content: String,
-    val timestamp: Long
-){
-
-}
+    val subtaskId: Long? = null,
+    val name: String,
+    val isComplete: Boolean = false,
+    val taskId: Long
+)

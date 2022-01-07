@@ -28,7 +28,7 @@ import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.rizqi.todo.ui.theme.*
 import com.rizqi.todo.presentation.task_list.TaskEvent
-import com.rizqi.todo.presentation.task_list.TaskState
+import com.rizqi.todo.presentation.task_list.TaskListState
 import com.rizqi.todo.presentation.task_list.TaskViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
@@ -42,10 +42,10 @@ fun TaskAppBar(
     appBarExtendedHeight: Dp = 125.dp,
     scrollState: LazyListState,
     pagerState: PagerState,
-    state: TaskState,
+    listState: TaskListState,
     viewModel: TaskViewModel
 ) {
-    val contentHeight = (if(state.isOrderSectionVisible) 225.dp else appBarExtendedHeight) - appBarCollapsedHeight
+    val contentHeight = (if(listState.isOrderSectionVisible) 225.dp else appBarExtendedHeight) - appBarCollapsedHeight
     val maxOffset = with(LocalDensity.current){
         contentHeight.roundToPx()
     } - LocalWindowInsets.current.systemBars.layoutInsets.top
@@ -57,7 +57,7 @@ fun TaskAppBar(
         backgroundColor = Color.White,
         modifier = Modifier
             .height(
-                if(state.isOrderSectionVisible) 225.dp else appBarExtendedHeight
+                if(listState.isOrderSectionVisible) 225.dp else appBarExtendedHeight
             )
             .offset {
                 IntOffset(x = 0, y = -offset)
@@ -125,7 +125,7 @@ fun TaskAppBar(
                         }
                     }
                     AnimatedVisibility(
-                        visible = state.isOrderSectionVisible,
+                        visible = listState.isOrderSectionVisible,
                         enter = fadeIn() + slideInVertically(),
                         exit = fadeOut() + slideOutVertically()
                     ) {
@@ -133,7 +133,7 @@ fun TaskAppBar(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = 8.dp),
-                            taskOrder = state.taskOrder,
+                            taskOrder = listState.taskOrder,
                             onOrderChange = {
                                 viewModel.onEvent(TaskEvent.Order(it))
                             }
@@ -216,7 +216,7 @@ fun TaskAppBarPreview() {
         TaskAppBar(
             scrollState = rememberLazyListState(),
             pagerState = rememberPagerState(),
-            state = TaskState(),
+            listState = TaskListState(),
             viewModel = hiltViewModel()
         )
     }

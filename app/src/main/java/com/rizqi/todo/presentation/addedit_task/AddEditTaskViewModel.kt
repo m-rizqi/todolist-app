@@ -8,6 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.rizqi.todo.domain.model.Subtask
 import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.domain.use_case.TaskUseCases
 import com.rizqi.todo.domain.util.InvalidTaskException
@@ -30,6 +31,9 @@ class AddEditTaskViewModel @Inject constructor(
     private val _taskDueDate = mutableStateOf(0L)
     val taskDueDate: State<Long> = _taskDueDate
 
+    private val _subtasks = mutableStateOf(emptyList<Subtask>())
+    val subtasks: State<List<Subtask>> = _subtasks
+
     private val _taskContent = mutableStateOf(TaskTextFieldState())
     val taskContent: State<TaskTextFieldState> = _taskContent
 
@@ -43,11 +47,14 @@ class AddEditTaskViewModel @Inject constructor(
             if(taskId != -1L){
                 viewModelScope.launch {
                     taskUseCases.getTask(taskId)?.also { task ->
-                        currentTaskId = task.id
+                        currentTaskId = task.taskId
                         _taskTitle.value = taskTitle.value.copy(
                             text = task.title,
                         )
                         _taskDueDate.value = task.timestamp
+                        viewModelScope.launch {
+                            _subtasks.value = taskUseCases.getTaskWithSubtask(taskId)[0].subtasks
+                        }
                         _taskContent.value = taskContent.value.copy(
                             text = task.content,
                         )
@@ -109,7 +116,7 @@ class AddEditTaskViewModel @Inject constructor(
                                 title = taskTitle.value.text,
                                 content = taskTitle.value.text,
                                 timestamp = taskDueDate.value,
-                                id = currentTaskId
+                                taskId = currentTaskId
                             )
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
@@ -124,6 +131,7 @@ class AddEditTaskViewModel @Inject constructor(
             }
         }
     }
+
 
     sealed class UiEvent {
         data class ShowSnackbar(val message: String): UiEvent()
