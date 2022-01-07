@@ -8,7 +8,7 @@ class InsertTask(
     private val repository: TaskRepository
 ) {
     @Throws(InvalidTaskException::class)
-    suspend operator fun invoke(task: Task){
-        repository.insertTask(task)
+    suspend operator fun invoke(task: Task) : Long{
+        return repository.insertTask(task)
     }
 }

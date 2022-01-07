@@ -7,5 +7,6 @@ data class TaskUseCases(
     val insertTask: InsertTask,
     val getTaskWithSubtask: GetTaskWithSubtask,
     val insertSubtask: InsertSubtask,
-    val deleteSubtask: DeleteSubtask
+    val deleteSubtask: DeleteSubtask,
+    val getSubtask : GetSubtask
 )

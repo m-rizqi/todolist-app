@@ -77,15 +77,13 @@ class TaskViewModel @Inject constructor(
         }
     }
 
-    fun getSubtask(taskId: Long): List<Subtask> {
+    suspend fun getSubtask(taskId: Long): List<Subtask> {
         val subtasks = mutableStateOf(emptyList<Subtask>())
-        viewModelScope.launch {
-            subtasks.value = taskUseCases.getTaskWithSubtask(taskId)[0].subtasks
-        }
+        subtasks.value = taskUseCases.getTaskWithSubtask(taskId)[0].subtasks
         return subtasks.value
     }
 
-    fun isTaskComplete(taskId: Long): Float{
+    suspend fun getPrecentageCompleted(taskId: Long): Float{
         val subtask = getSubtask(taskId)
         var completed = 0
         subtask.forEach{
@@ -93,8 +91,8 @@ class TaskViewModel @Inject constructor(
                 completed++
             }
         }
-        Log.d(TAG,"subtasks:${subtask.size}")
-        return if(subtask.isEmpty()) 0F else (completed / subtask.size).toFloat()
+        val percent = if(subtask.isEmpty()) 0F else (completed.toFloat() / subtask.size.toFloat())
+        return percent
     }
 
     private fun getAlltask(taskOrder: TaskOrder){
@@ -112,11 +110,11 @@ class TaskViewModel @Inject constructor(
                         }
                         if (completed == subtasks.size && subtasks.size != 0){
                             _state.value = listState.value.copy(
-                                completeTasks = _state.value.completeTasks.plus(task)
+                                completeTasks = listState.value.completeTasks.plus(task)
                             )
                         }else{
                             _state.value = listState.value.copy(
-                                todoTasks = _state.value.todoTasks.plus(task)
+                                todoTasks = listState.value.todoTasks.plus(task)
                             )
                         }
                     }

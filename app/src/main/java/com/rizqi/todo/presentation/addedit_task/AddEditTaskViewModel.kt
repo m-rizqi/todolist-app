@@ -60,6 +60,17 @@ class AddEditTaskViewModel @Inject constructor(
                         )
                     }
                 }
+            }else{
+                viewModelScope.launch {
+                    currentTaskId = taskUseCases.insertTask(
+                        Task(
+                            title = taskTitle.value.text,
+                            content = taskTitle.value.text,
+                            timestamp = taskDueDate.value,
+                            taskId = currentTaskId
+                        )
+                    )
+                }
             }
         }
     }
@@ -107,6 +118,24 @@ class AddEditTaskViewModel @Inject constructor(
                 _taskTitle.value = taskTitle.value.copy(
                     text = event.value
                 )
+            }
+            is AddEditTaskEvent.AddSubtask -> {
+                val subtask = Subtask(null, "", false, currentTaskId ?: 0)
+                _subtasks.value = subtasks.value.plus(subtask)
+                viewModelScope.launch {
+                    taskUseCases.insertSubtask(subtask)
+                }
+            }
+            is AddEditTaskEvent.DeleteSubtask -> {
+                _subtasks.value = subtasks.value.minusElement(event.subtask)
+                viewModelScope.launch {
+                    taskUseCases.deleteSubtask(event.subtask)
+                }
+            }
+            is AddEditTaskEvent.SaveSubtask -> {
+                viewModelScope.launch {
+                    taskUseCases.insertSubtask(event.subtask.copy(name = event.name))
+                }
             }
             is AddEditTaskEvent.SaveTask -> {
                 viewModelScope.launch {

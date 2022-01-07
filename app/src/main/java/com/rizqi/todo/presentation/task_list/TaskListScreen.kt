@@ -44,27 +44,6 @@ fun TaskListScreen(
     val scope = rememberCoroutineScope()
     activity.window.statusBarColor = GreyC4.hashCode()
     activity.window.navigationBarColor = BlueGradient2.hashCode()
-    val dao = TaskDatabase.getInstance(LocalContext.current).taskDao
-    val tasks = listOf<Task>(
-        Task(1, "Task 1", "Content 1", 1L),
-        Task(2, "Task 2", "Content 2", 2L),
-        Task(3, "Task 3", "Content 3", 3L)
-    )
-    val subtasks = listOf<Subtask>(
-        Subtask(1,"Subtask 1", true, 1),
-        Subtask(2,"Subtask 2", false, 1),
-        Subtask(3,"Subtask 3", true, 2),
-        Subtask(4,"Subtask 4", true, 2),
-        Subtask(5,"Subtask 5", false, 1),
-    )
-    LaunchedEffect(key1 = true){
-        scope.launch {
-            tasks.forEach { dao.insertTask(it) }
-            subtasks.forEach { dao.insertSubtask(it) }
-            val taskWithSubtasks = dao.getTaskWithSubtask(3)
-            println(taskWithSubtasks)
-        }
-    }
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(

@@ -15,7 +15,7 @@ interface TaskDao {
     suspend fun getTaskById(id: Long): Task?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTask(task: Task)
+    suspend fun insertTask(task: Task) : Long
 
     @Delete
     suspend fun deleteTask(task: Task)
@@ -24,10 +24,13 @@ interface TaskDao {
     suspend fun updateTask(task: Task)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSubtask(subtask: Subtask)
+    suspend fun insertSubtask(subtask: Subtask) : Long
 
     @Delete
-    suspend fun deleteSubtask(task: Task)
+    suspend fun deleteSubtask(subtask: Subtask)
+
+    @Query("SELECT * FROM subtask WHERE subtaskId = :subtaskId")
+    suspend fun getSubtaskById(subtaskId : Long) : Subtask?
 
     @Transaction
     @Query("SELECT * FROM task WHERE taskId = :taskId")

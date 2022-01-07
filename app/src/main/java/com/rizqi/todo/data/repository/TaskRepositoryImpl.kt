@@ -20,8 +20,8 @@ class TaskRepositoryImpl (private val taskDao: TaskDao) : TaskRepository {
         return taskDao.getTaskById(id)
     }
 
-    override suspend fun insertTask(task: Task) {
-        taskDao.insertTask(task)
+    override suspend fun insertTask(task: Task) : Long{
+        return taskDao.insertTask(task)
     }
 
     override suspend fun deleteTask(task: Task) {
@@ -32,11 +32,15 @@ class TaskRepositoryImpl (private val taskDao: TaskDao) : TaskRepository {
         taskDao.updateTask(task)
     }
 
-    override suspend fun insertSubtask(subtask: Subtask) {
-        TODO("Not yet implemented")
+    override suspend fun insertSubtask(subtask: Subtask) : Long{
+        return taskDao.insertSubtask(subtask)
     }
 
     override suspend fun deleteSubtask(subtask: Subtask) {
-        TODO("Not yet implemented")
+        taskDao.deleteSubtask(subtask)
+    }
+
+    override suspend fun getSubtaskById(subtaskId: Long): Subtask? {
+        return taskDao.getSubtaskById(subtaskId)
     }
 }

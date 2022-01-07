@@ -170,7 +170,7 @@ fun TaskAppBar(
                             height = 2.dp,
                             color = when(pagerState.currentPage){
                                 0 -> OrangeInProgress
-                                1 -> GreenComplete
+                                1 -> BlueSoft
                                 else -> {
                                     GreyC4}
                             }

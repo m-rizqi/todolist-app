@@ -1,12 +1,13 @@
 package com.rizqi.todo.presentation.addedit_task
 
 import androidx.compose.ui.focus.FocusState
+import com.rizqi.todo.domain.model.Subtask
 
 sealed class AddEditTaskEvent{
     data class EnteredTitle(val value: String): AddEditTaskEvent()
     data class EnteredContent(val value: String): AddEditTaskEvent()
-    data class EnteredSubtaskName(val value: String) : AddEditTaskEvent()
     object SaveTask: AddEditTaskEvent()
     object AddSubtask: AddEditTaskEvent()
-    object DeleteSubtask: AddEditTaskEvent()
+    data class SaveSubtask(val name: String, val subtask: Subtask): AddEditTaskEvent()
+    data  class DeleteSubtask(val subtask: Subtask) : AddEditTaskEvent()
 }

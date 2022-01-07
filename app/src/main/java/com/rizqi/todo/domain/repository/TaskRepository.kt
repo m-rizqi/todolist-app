@@ -12,13 +12,15 @@ interface TaskRepository {
 
     suspend fun getTaskById(id: Long): Task?
 
-    suspend fun insertTask(task: Task)
+    suspend fun insertTask(task: Task) : Long
 
     suspend fun deleteTask(task: Task)
 
     suspend fun updateTask(task: Task)
 
-    suspend fun insertSubtask(subtask: Subtask)
+    suspend fun insertSubtask(subtask: Subtask) : Long
 
     suspend fun deleteSubtask(subtask: Subtask)
+
+    suspend fun getSubtaskById(subtaskId: Long): Subtask?
 }

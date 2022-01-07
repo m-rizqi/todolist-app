@@ -43,6 +43,7 @@ object AppModule {
             getTaskWithSubtask = GetTaskWithSubtask(repository),
             insertSubtask = InsertSubtask(repository),
             deleteSubtask = DeleteSubtask(repository),
+            getSubtask = GetSubtask(repository)
         )
     }
 }

@@ -1,5 +1,7 @@
 package com.rizqi.todo.presentation.task_list.components
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -66,8 +68,9 @@ fun TaskListSection(
                     Column(
                         modifier = Modifier.padding(16.dp)
                     ) {
-                        if(page == 0){
-                                listState.todoTasks.forEach { task ->
+                        when(page){
+                            0 -> {
+                                listState.todoTasks.onEach { task ->
                                     TaskCard(
                                         task = task,
                                         modifier = Modifier
@@ -94,8 +97,9 @@ fun TaskListSection(
                                     Spacer(modifier = Modifier.height(10.dp))
                                 }
                             }
-                            else{
-                                listState.completeTasks.forEach{task ->
+                            1 -> {
+                                listState.completeTasks.onEach{task ->
+                                    Log.d(TAG,"size:${listState.completeTasks.size}")
                                     TaskCard(
                                         task = task,
                                         modifier = Modifier
@@ -120,6 +124,7 @@ fun TaskListSection(
                                         }
                                     )
                                     Spacer(modifier = Modifier.height(10.dp))
+                                }
                             }
                         }
                     }

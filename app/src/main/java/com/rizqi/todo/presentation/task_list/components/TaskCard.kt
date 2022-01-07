@@ -1,10 +1,15 @@
 package com.rizqi.todo.presentation.task_list.components
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,9 +23,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.rizqi.todo.R
 import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.presentation.task_list.TaskViewModel
-import com.rizqi.todo.ui.theme.GreyE8
-import com.rizqi.todo.ui.theme.OrangeInProgress
-import com.rizqi.todo.ui.theme.Poppins
+import com.rizqi.todo.ui.theme.*
+import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
@@ -30,6 +34,17 @@ fun TaskCard(
     onDeleteClick: () -> Unit,
     viewModel: TaskViewModel
 ) {
+    val taskPercentage = remember {
+        mutableStateOf(0F)
+    }
+    LaunchedEffect(key1 = true){
+        this.launch {
+            task.taskId?.let {
+                taskPercentage.value = viewModel.getPrecentageCompleted(it)
+            }
+
+        }
+    }
    Box(modifier = modifier){
        Card(
            elevation = 5.dp,
@@ -85,19 +100,50 @@ fun TaskCard(
                    )
                )
                Spacer(modifier = Modifier.height(3.dp))
-               Slider(
+               Row(
                    modifier = Modifier.fillMaxWidth(),
-                   value = 0F,
-                   enabled = false,
-                   valueRange = 0f..1f,
-                   onValueChange = {},
-                   colors = SliderDefaults.colors(
-                       thumbColor = Color.Transparent,
-                       disabledThumbColor = Color.Transparent,
-                       disabledActiveTrackColor = OrangeInProgress,
-                       disabledInactiveTickColor = GreyE8
+                   verticalAlignment = Alignment.CenterVertically
+               ) {
+                   Slider(
+                       modifier = Modifier.weight(1f),
+                       value = taskPercentage.value,
+                       enabled = false,
+                       valueRange = 0f..1f,
+                       onValueChange = {},
+                       colors = SliderDefaults.colors(
+                           thumbColor = Color.Transparent,
+                           disabledThumbColor = Color.Transparent,
+                           disabledActiveTrackColor = when(taskPercentage.value){
+                               in 0F..0.3F -> {
+                                   RedToDo
+                               }
+                               in 0.3F..0.6F -> {
+                                   OrangeInProgress
+                               }
+                               in 0.6F..0.95F -> {
+                                   GreenComplete
+                               }
+                               in 0.95F..1F -> {
+                                   BlueSoft
+                               }
+                               else -> {
+                                   GreyC4
+                               }
+                           },
+                           disabledInactiveTickColor = GreyE8
+                       )
                    )
-               )
+                   Text(
+                       modifier = Modifier,
+                       text = "${(taskPercentage.value * 100).toInt()} %",
+                       style = TextStyle(
+                           fontFamily = Poppins,
+                           fontWeight = FontWeight.Normal,
+                           color = Color.Black.copy(alpha = 0.8F),
+                           fontSize = 12.sp
+                       )
+                   )
+               }
                Spacer(modifier = Modifier.height(8.dp))
            }
        }
