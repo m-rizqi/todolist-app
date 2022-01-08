@@ -121,9 +121,9 @@ class AddEditTaskViewModel @Inject constructor(
             }
             is AddEditTaskEvent.AddSubtask -> {
                 val subtask = Subtask(null, "", false, currentTaskId ?: 0)
-                _subtasks.value = subtasks.value.plus(subtask)
                 viewModelScope.launch {
-                    taskUseCases.insertSubtask(subtask)
+                    val id = taskUseCases.insertSubtask(subtask)
+                    _subtasks.value = subtasks.value.plus(subtask.copy(subtaskId = id))
                 }
             }
             is AddEditTaskEvent.DeleteSubtask -> {

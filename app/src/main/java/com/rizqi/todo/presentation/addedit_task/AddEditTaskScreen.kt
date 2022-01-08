@@ -15,9 +15,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.LineWeight
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -153,10 +151,13 @@ fun AddEditTaskScreen(
                      modifier = Modifier.fillMaxWidth(),
                  ) {
                      subtaskState.value.forEachIndexed() { index, subtask ->
+                         val _subtask = remember {
+                             mutableStateOf(subtask)
+                         }
                          SubtaskItem(
-                             subtask = subtask,
+                             subtask = _subtask,
                              onDelete = {
-                                 viewModel.onEvent(AddEditTaskEvent.DeleteSubtask(subtask))
+                                 viewModel.onEvent(AddEditTaskEvent.DeleteSubtask(_subtask.value))
                              },
                          )
                      }

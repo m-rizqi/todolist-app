@@ -31,17 +31,11 @@ import kotlinx.coroutines.launch
 @ExperimentalComposeUiApi
 @Composable
 fun SubtaskItem(
-    subtask: Subtask,
+    subtask: MutableState<Subtask>,
     onDelete: () -> Unit,
 ) {
     val keyboardController = LocalSoftwareKeyboardController.current
     val scope = rememberCoroutineScope()
-    val name = remember{
-        mutableStateOf(subtask.name)
-    }
-    val isComplete = remember {
-        mutableStateOf(subtask.isComplete)
-    }
     val dao = TaskDatabase.getInstance(LocalContext.current).taskDao
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -53,11 +47,11 @@ fun SubtaskItem(
         ) {
             TextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = name.value,
+                value = subtask.value.name,
                 onValueChange = {
-                    name.value = it
+                    subtask.value = subtask.value.copy(name = it)
                     scope.launch {
-                        dao.insertSubtask(subtask.copy(isComplete = isComplete.value, name = it))
+                        dao.insertSubtask(subtask.value)
                     }
                 },
                 leadingIcon = {
@@ -67,14 +61,14 @@ fun SubtaskItem(
                         Icon(
                             imageVector = Icons.Default.List,
                             contentDescription = "Subtask",
-                            tint = if(isComplete.value) GreyC4 else Grey7
+                            tint = if(subtask.value.isComplete) GreyC4 else Grey7
                         )
                         Checkbox(
-                            checked = isComplete.value,
+                            checked = subtask.value.isComplete,
                             onCheckedChange = {
-                                isComplete.value = it
+                                subtask.value = subtask.value.copy(isComplete = it)
                                 scope.launch {
-                                    dao.insertSubtask(subtask.copy(isComplete = it, name = name.value))
+                                    dao.insertSubtask(subtask.value)
                                 }
                             },
                             colors = CheckboxDefaults.colors(checkedColor = BlueSoft, uncheckedColor = GreyC4, checkmarkColor = Color.White),
@@ -94,7 +88,7 @@ fun SubtaskItem(
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     cursorColor = Color.Black,
-                    textColor = if(isComplete.value) GreyC4 else Color.Black,
+                    textColor = if(subtask.value.isComplete) GreyC4 else Color.Black,
                     focusedIndicatorColor = Grey7,
                     unfocusedIndicatorColor = GreyC4,
                     disabledIndicatorColor = Color.Transparent
@@ -106,19 +100,5 @@ fun SubtaskItem(
                 )
             )
         }
-    }
-}
-
-@ExperimentalComposeUiApi
-@Preview
-@Composable
-fun SubtaskItemPreview() {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(Color.White), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
-        SubtaskItem(
-            subtask = Subtask(1,"Subtask 1", false, 1),
-            onDelete = {},
-        )
     }
 }
