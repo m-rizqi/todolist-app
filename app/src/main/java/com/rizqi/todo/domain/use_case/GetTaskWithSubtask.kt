@@ -1,6 +1,5 @@
 package com.rizqi.todo.domain.use_case
 
-import com.rizqi.todo.domain.model.Subtask
 import com.rizqi.todo.domain.model.TaskWithSubtasks
 import com.rizqi.todo.domain.repository.TaskRepository
 

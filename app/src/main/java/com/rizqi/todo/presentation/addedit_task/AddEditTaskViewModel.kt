@@ -11,7 +11,6 @@ import androidx.lifecycle.viewModelScope
 import com.rizqi.todo.domain.model.Subtask
 import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.domain.use_case.TaskUseCases
-import com.rizqi.todo.domain.util.InvalidTaskException
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -127,10 +126,10 @@ class AddEditTaskViewModel @Inject constructor(
                 }
             }
             is AddEditTaskEvent.DeleteSubtask -> {
-                _subtasks.value = subtasks.value.minusElement(event.subtask)
                 viewModelScope.launch {
                     taskUseCases.deleteSubtask(event.subtask)
                 }
+                _subtasks.value = subtasks.value.minus(event.subtask)
             }
             is AddEditTaskEvent.SaveSubtask -> {
                 viewModelScope.launch {
@@ -149,7 +148,7 @@ class AddEditTaskViewModel @Inject constructor(
                             )
                         )
                         _eventFlow.emit(UiEvent.SaveNote)
-                    }catch (e: InvalidTaskException){
+                    }catch (e: Exception){
                         _eventFlow.emit(
                             UiEvent.ShowSnackbar(
                                 message = e.message ?: "Couldn't save task"

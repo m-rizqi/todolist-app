@@ -60,7 +60,7 @@ fun TaskListSection(
     ){
         LazyColumn(
             modifier = Modifier.align(Alignment.TopCenter),
-            contentPadding = PaddingValues(top = if(listState.isOrderSectionVisible) 225.dp else appBarExtendedHeight),
+            contentPadding = PaddingValues(top = appBarExtendedHeight),
             state = scrollState
         ) {
             item {
@@ -83,6 +83,7 @@ fun TaskListSection(
                                         viewModel = viewModel,
                                         onDeleteClick = {
                                             viewModel.onEvent(TaskEvent.DeleteTask(task))
+                                            listState.todoTasks.minus(task)
                                             scope.launch {
                                                 val result = scaffoldState.snackbarHostState.showSnackbar(
                                                     message = "Task deleted",
@@ -112,6 +113,7 @@ fun TaskListSection(
                                         viewModel = viewModel,
                                         onDeleteClick = {
                                             viewModel.onEvent(TaskEvent.DeleteTask(task))
+                                            listState.completeTasks.minus(task)
                                             scope.launch {
                                                 val result = scaffoldState.snackbarHostState.showSnackbar(
                                                     message = "Task deleted",

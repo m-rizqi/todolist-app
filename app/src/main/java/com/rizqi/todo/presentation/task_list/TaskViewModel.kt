@@ -1,7 +1,5 @@
 package com.rizqi.todo.presentation.task_list
 
-import android.content.ContentValues.TAG
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -9,8 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.rizqi.todo.domain.model.Subtask
 import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.domain.use_case.TaskUseCases
-import com.rizqi.todo.domain.util.OrderType
-import com.rizqi.todo.domain.util.TaskOrder
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.launchIn
@@ -39,7 +35,7 @@ class TaskViewModel @Inject constructor(
     private var getTaskJob: Job? = null
 
     init {
-        getAlltask(TaskOrder.Date(OrderType.Ascending))
+        getAlltask()
     }
 
     fun dateFormatter(timestamp: Long): String{
@@ -50,13 +46,6 @@ class TaskViewModel @Inject constructor(
 
     fun onEvent(event: TaskEvent){
         when(event){
-            is TaskEvent.Order ->  {
-                if(listState.value.taskOrder::class == event.taskOrder::class &&
-                        listState.value.taskOrder.orderType == event.taskOrder.orderType){
-                    return
-                }
-                getAlltask(event.taskOrder)
-            }
             is TaskEvent.DeleteTask -> {
                 viewModelScope.launch {
                     taskUseCases.deleteTask(event.task)
@@ -68,11 +57,6 @@ class TaskViewModel @Inject constructor(
                     taskUseCases.insertTask(recentlyDeleteNote ?: return@launch)
                     recentlyDeleteNote = null
                 }
-            }
-            is TaskEvent.ToggleOrderSection -> {
-                _state.value = listState.value.copy(
-                    isOrderSectionVisible = !listState.value.isOrderSectionVisible
-                )
             }
         }
     }
@@ -95,9 +79,9 @@ class TaskViewModel @Inject constructor(
         return percent
     }
 
-    private fun getAlltask(taskOrder: TaskOrder){
+    private fun getAlltask(){
         getTaskJob?.cancel()
-        getTaskJob = taskUseCases.getAllTasks(taskOrder)
+        getTaskJob = taskUseCases.getAllTasks()
             .onEach { tasks ->
                 tasks.onEach { task ->
                     viewModelScope.launch {

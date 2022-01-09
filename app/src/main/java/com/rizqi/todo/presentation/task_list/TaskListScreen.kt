@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -17,16 +16,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
-import com.rizqi.todo.data.database.TaskDatabase
-import com.rizqi.todo.domain.model.Subtask
-import com.rizqi.todo.domain.model.Task
 import com.rizqi.todo.presentation.navigation.Screen
 import com.rizqi.todo.presentation.task_list.components.TaskAppBar
 import com.rizqi.todo.presentation.task_list.components.TaskListSection
 import com.rizqi.todo.ui.theme.BlueGradient2
 import com.rizqi.todo.ui.theme.BlueSoft
 import com.rizqi.todo.ui.theme.GreyC4
-import kotlinx.coroutines.launch
 
 @ExperimentalAnimationApi
 @ExperimentalMaterialApi
@@ -71,7 +66,6 @@ fun TaskListScreen(
                 scrollState = scrollState,
                 pagerState = pagerState,
                 listState = state,
-                viewModel = viewModel
             )
         }
     }

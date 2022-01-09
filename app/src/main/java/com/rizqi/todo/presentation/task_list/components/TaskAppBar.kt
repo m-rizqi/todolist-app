@@ -6,12 +6,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Sort
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
@@ -20,16 +16,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.insets.LocalWindowInsets
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.google.accompanist.pager.pagerTabIndicatorOffset
 import com.google.accompanist.pager.rememberPagerState
 import com.rizqi.todo.ui.theme.*
-import com.rizqi.todo.presentation.task_list.TaskEvent
 import com.rizqi.todo.presentation.task_list.TaskListState
-import com.rizqi.todo.presentation.task_list.TaskViewModel
 import kotlinx.coroutines.launch
 import kotlin.math.max
 import kotlin.math.min
@@ -43,9 +36,8 @@ fun TaskAppBar(
     scrollState: LazyListState,
     pagerState: PagerState,
     listState: TaskListState,
-    viewModel: TaskViewModel
 ) {
-    val contentHeight = (if(listState.isOrderSectionVisible) 225.dp else appBarExtendedHeight) - appBarCollapsedHeight
+    val contentHeight = appBarExtendedHeight - appBarCollapsedHeight
     val maxOffset = with(LocalDensity.current){
         contentHeight.roundToPx()
     } - LocalWindowInsets.current.systemBars.layoutInsets.top
@@ -57,7 +49,7 @@ fun TaskAppBar(
         backgroundColor = Color.White,
         modifier = Modifier
             .height(
-                if(listState.isOrderSectionVisible) 225.dp else appBarExtendedHeight
+                appBarExtendedHeight
             )
             .offset {
                 IntOffset(x = 0, y = -offset)
@@ -93,50 +85,6 @@ fun TaskAppBar(
                                 fontSize = 24.sp,
                                 color = Color.Black
                             )
-                        )
-                        Row(
-                            modifier = Modifier
-                                .wrapContentWidth()
-                                .align(Alignment.CenterEnd),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                        ) {
-                            IconButton(
-                                onClick = { /*TODO*/ },
-                                modifier = Modifier.size(28.dp),
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Filled.Search,
-                                    contentDescription = "Search",
-                                    tint = Color.Gray
-                                )
-                            }
-                            IconButton(
-                                onClick = {
-                                          viewModel.onEvent(TaskEvent.ToggleOrderSection)
-                                },
-                                modifier = Modifier.size(28.dp),
-                            ) {
-                                Icon(
-                                    imageVector = Icons.Default.Sort,
-                                    contentDescription = "Sort",
-                                    tint = Color.Gray
-                                )
-                            }
-                        }
-                    }
-                    AnimatedVisibility(
-                        visible = listState.isOrderSectionVisible,
-                        enter = fadeIn() + slideInVertically(),
-                        exit = fadeOut() + slideOutVertically()
-                    ) {
-                        OrderSection(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = 8.dp),
-                            taskOrder = listState.taskOrder,
-                            onOrderChange = {
-                                viewModel.onEvent(TaskEvent.Order(it))
-                            }
                         )
                     }
                 }
@@ -217,7 +165,6 @@ fun TaskAppBarPreview() {
             scrollState = rememberLazyListState(),
             pagerState = rememberPagerState(),
             listState = TaskListState(),
-            viewModel = hiltViewModel()
         )
     }
 }

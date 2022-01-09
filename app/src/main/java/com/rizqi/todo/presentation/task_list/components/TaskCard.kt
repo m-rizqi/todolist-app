@@ -1,7 +1,5 @@
 package com.rizqi.todo.presentation.task_list.components
 
-import android.content.ContentValues
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,10 +30,14 @@ fun TaskCard(
     task: Task,
     modifier: Modifier = Modifier,
     onDeleteClick: () -> Unit,
-    viewModel: TaskViewModel
+    viewModel: TaskViewModel,
+    delete:Boolean = false
 ) {
     val taskPercentage = remember {
         mutableStateOf(0F)
+    }
+    val isDelete = remember {
+        mutableStateOf(delete)
     }
     LaunchedEffect(key1 = true){
         this.launch {
@@ -45,109 +47,115 @@ fun TaskCard(
 
         }
     }
-   Box(modifier = modifier){
-       Card(
-           elevation = 5.dp,
-           shape = RoundedCornerShape(8.dp),
-           backgroundColor = Color.White,
-       ) {
-           Column(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .padding(8.dp)
-           ) {
-               Row(
-                   modifier = Modifier.fillMaxWidth(),
-               ) {
-                   Row(
-                       modifier = Modifier
-                           .fillMaxWidth()
-                           .padding(end = 8.dp),
-                       verticalAlignment = Alignment.CenterVertically,
-                       horizontalArrangement = Arrangement.SpaceBetween
-                   ){
-                       Text(
-                           text = task.title,
-                           style = TextStyle(
-                               fontFamily = Poppins,
-                               fontWeight = FontWeight.Medium,
-                               color = Color.Black,
-                               fontSize = 18.sp
-                           )
-                       )
+    if(!isDelete.value){
+        Box(modifier = modifier){
+            Card(
+                elevation = 5.dp,
+                shape = RoundedCornerShape(8.dp),
+                backgroundColor = Color.White,
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(end = 8.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ){
+                            Text(
+                                text = task.title,
+                                style = TextStyle(
+                                    fontFamily = Poppins,
+                                    fontWeight = FontWeight.Medium,
+                                    color = Color.Black,
+                                    fontSize = 18.sp
+                                )
+                            )
 
-                       IconButton(
-                           modifier = Modifier.size(14.dp),
-                           onClick = onDeleteClick
-                       ) {
-                           Icon(
-                               modifier = Modifier.size(14.dp),
-                               painter = painterResource(id = R.drawable.trash_alt_regular),
-                               contentDescription = "Delete",
-                               tint = Color.Black
-                           )
-                       }
-                   }
-               }
-               Spacer(modifier = Modifier.height(3.dp))
-               Text(
-                   text = if(task.timestamp == 0L) "Due date hasn't set yet" else viewModel.dateFormatter(task.timestamp),
-                   style = TextStyle(
-                       fontFamily = Poppins,
-                       fontWeight = FontWeight.Normal,
-                       color = if(task.timestamp == 0L) Color.Red else GreyE8,
-                       fontSize = 12.sp
-                   )
-               )
-               Spacer(modifier = Modifier.height(3.dp))
-               Row(
-                   modifier = Modifier.fillMaxWidth(),
-                   verticalAlignment = Alignment.CenterVertically
-               ) {
-                   Slider(
-                       modifier = Modifier.weight(1f),
-                       value = taskPercentage.value,
-                       enabled = false,
-                       valueRange = 0f..1f,
-                       onValueChange = {},
-                       colors = SliderDefaults.colors(
-                           thumbColor = Color.Transparent,
-                           disabledThumbColor = Color.Transparent,
-                           disabledActiveTrackColor = when(taskPercentage.value){
-                               in 0F..0.3F -> {
-                                   RedToDo
-                               }
-                               in 0.3F..0.6F -> {
-                                   OrangeInProgress
-                               }
-                               in 0.6F..0.95F -> {
-                                   GreenComplete
-                               }
-                               in 0.95F..1F -> {
-                                   BlueSoft
-                               }
-                               else -> {
-                                   GreyC4
-                               }
-                           },
-                           disabledInactiveTickColor = GreyE8
-                       )
-                   )
-                   Text(
-                       modifier = Modifier,
-                       text = "${(taskPercentage.value * 100).toInt()} %",
-                       style = TextStyle(
-                           fontFamily = Poppins,
-                           fontWeight = FontWeight.Normal,
-                           color = Color.Black.copy(alpha = 0.8F),
-                           fontSize = 12.sp
-                       )
-                   )
-               }
-               Spacer(modifier = Modifier.height(8.dp))
-           }
-       }
-   }
+                            IconButton(
+                                modifier = Modifier.size(14.dp),
+                                onClick = {
+                                    onDeleteClick()
+                                    isDelete.value = true
+                                }
+                            ) {
+                                Icon(
+                                    modifier = Modifier.size(14.dp),
+                                    painter = painterResource(id = R.drawable.trash_alt_regular),
+                                    contentDescription = "Delete",
+                                    tint = Color.Black
+                                )
+                            }
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(3.dp))
+                    Text(
+                        text = if(task.timestamp == 0L) "Due date hasn't set yet" else viewModel.dateFormatter(task.timestamp),
+                        style = TextStyle(
+                            fontFamily = Poppins,
+                            fontWeight = FontWeight.Normal,
+                            color = if(task.timestamp == 0L) Color.Red else GreyE8,
+                            fontSize = 12.sp
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(3.dp))
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Slider(
+                            modifier = Modifier.weight(1f),
+                            value = taskPercentage.value,
+                            enabled = false,
+                            valueRange = 0f..1f,
+                            onValueChange = {},
+                            colors = SliderDefaults.colors(
+                                thumbColor = Color.Transparent,
+                                disabledThumbColor = Color.Transparent,
+                                disabledActiveTrackColor = when(taskPercentage.value){
+                                    in 0F..0.3F -> {
+                                        RedToDo
+                                    }
+                                    in 0.3F..0.6F -> {
+                                        OrangeInProgress
+                                    }
+                                    in 0.6F..0.95F -> {
+                                        GreenComplete
+                                    }
+                                    in 0.95F..1F -> {
+                                        BlueSoft
+                                    }
+                                    else -> {
+                                        GreyC4
+                                    }
+                                },
+                                disabledInactiveTickColor = GreyE8
+                            )
+                        )
+                        Text(
+                            modifier = Modifier,
+                            text = "${(taskPercentage.value * 100).toInt()} %",
+                            style = TextStyle(
+                                fontFamily = Poppins,
+                                fontWeight = FontWeight.Normal,
+                                color = Color.Black.copy(alpha = 0.8F),
+                                fontSize = 12.sp
+                            )
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                }
+            }
+        }
+    }
+
 }
 
 @ExperimentalMaterialApi
