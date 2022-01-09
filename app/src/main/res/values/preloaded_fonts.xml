@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <array name="preloaded_fonts" translatable="false">
+<<<<<<< HEAD
+=======
+        <item>@font/poppins_bold</item>
+        <item>@font/poppins_medium</item>
+>>>>>>> 6f536b9bd4c781f3a8537655be2ad9c9e185c7b7
         <item>@font/poppins_semibold</item>
     </array>
 </resources>

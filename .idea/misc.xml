@@ -3,7 +3,30 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+<<<<<<< HEAD
         <entry key="..\:/Kotlin/ToDo/app/src/main/res/drawable/trash_alt_regular.xml" value="0.10833333333333334" />
+=======
+        <entry key="../../../../../layout/compose-model-1640311615910.xml" value="0.16456228956228955" />
+        <entry key="../../../../../layout/compose-model-1640567282052.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1640572044957.xml" value="0.2882996632996633" />
+        <entry key="../../../../../layout/compose-model-1640576555360.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1640650186422.xml" value="0.176" />
+        <entry key="../../../../../layout/compose-model-1640757022204.xml" value="0.24814814814814815" />
+        <entry key="../../../../../layout/compose-model-1640757152529.xml" value="0.2891515407344871" />
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ellipsis_solid.xml" value="0.15555555555555556" />
+        <entry key="app/src/main/res/drawable/ic_google_logo.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1361111111111111" />
+        <entry key="app/src/main/res/drawable/ic_logo_launcher_background.xml" value="0.1361111111111111" />
+        <entry key="app/src/main/res/drawable/launched_screen.xml" value="0.3074074074074074" />
+        <entry key="app/src/main/res/drawable/splash_screen.xml" value="0.1" />
+        <entry key="app/src/main/res/font/poppins_medium.xml" value="0.1" />
+        <entry key="app/src/main/res/font/poppins_semibold.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logo_launcher.xml" value="0.1" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_logo_launcher_round.xml" value="0.1" />
+>>>>>>> 6f536b9bd4c781f3a8537655be2ad9c9e185c7b7
       </map>
     </option>
   </component>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<<<<<<< HEAD
     package="com.rizqi.todo">
 
     <application
@@ -10,17 +11,49 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ToDo">
+=======
+    package="com.rizqi.todolistapp">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:name=".FirebaseAppilaction"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher_logo"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_logo_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.ToDoListApp">
+        <activity
+            android:name="com.rizqi.todolistapp.presentation.home.HomeActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ToDoListApp.NoActionBar" />
+        <activity
+            android:name="com.rizqi.todolistapp.presentation.auth.AuthActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.ToDoListApp.NoActionBar" />
+>>>>>>> 6f536b9bd4c781f3a8537655be2ad9c9e185c7b7
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
+<<<<<<< HEAD
             android:theme="@style/Theme.ToDo.NoActionBar">
+=======
+            android:theme="@style/SplashScreen">
+>>>>>>> 6f536b9bd4c781f3a8537655be2ad9c9e185c7b7
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 6f536b9bd4c781f3a8537655be2ad9c9e185c7b7
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

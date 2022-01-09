@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "138606746110",
+    "project_id": "todolistapp-44316",
+    "storage_bucket": "todolistapp-44316.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138606746110:android:72bce11ef4938b76bbc8af",
+        "android_client_info": {
+          "package_name": "com.rizqi.todolistapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138606746110-v2ehieq3fbt70hdu6c812bquodq6htb4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB74UtqeQJ_dnlQG8uXcAn9cVdCwsaL8E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138606746110-v2ehieq3fbt70hdu6c812bquodq6htb4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
